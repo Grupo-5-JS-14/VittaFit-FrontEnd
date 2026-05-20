@@ -1,7 +1,12 @@
-import Explorar from "./pages/explorar/Explorar";
-
 function App() {
-  return <Explorar />;
+
+  return (
+    <>
+      <div className="flex">
+        <h2>Ola</h2>
+      </div>
+    </>
+  )
 }
 
-export default App;
+export default App

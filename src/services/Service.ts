@@ -22,3 +22,4 @@ export const atualizar = async (url: string, dados: Object) => {
 export const deletar = async (url: string) => {
   await api.delete(url);
 };
+});
