@@ -319,7 +319,7 @@ function Explorar() {
   return (
     <main className="min-h-screen bg-[#f4efe4] text-zinc-900 px-4 py-24">
       <section className="max-w-6xl mx-auto">
-        <div className="relative overflow-hidden bg-gradient-to-br from-[#0d6b72] via-[#074b52] to-[#052f35] rounded-[2.5rem] p-8 md:p-12 text-white mb-8 shadow-xl">
+        <div className="relative overflow-hidden bg-linear-to-br from-[#0d6b72] via-[#074b52] to-[#052f35] rounded-[2.5rem] p-8 md:p-12 text-white mb-8 shadow-xl">
           <div className="absolute -right-16 -top-16 w-64 h-64 bg-emerald-300/20 rounded-full blur-3xl"></div>
           <div className="absolute -left-20 -bottom-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl"></div>
 
@@ -337,7 +337,7 @@ function Explorar() {
           </div>
         </div>
 
-        <div className="bg-[#fffaf0] rounded-[2rem] p-5 md:p-7 shadow-sm border border-black/5 mb-8">
+        <div className="bg-[#fffaf0] rounded-4xl p-5 md:p-7 shadow-sm border border-black/5 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
             <div>
               <h2 className="text-2xl font-black">Publicações da comunidade</h2>
@@ -388,7 +388,7 @@ function Explorar() {
         {abrirForm && (
           <form
             onSubmit={publicarNoExplorar}
-            className="bg-[#fffaf0] border border-black/5 rounded-[2rem] p-6 md:p-8 shadow-sm mb-8"
+            className="bg-[#fffaf0] border border-black/5 rounded-4xl p-6 md:p-8 shadow-sm mb-8"
           >
             <div className="flex justify-between items-start gap-4 mb-5">
               <div>
@@ -471,7 +471,7 @@ function Explorar() {
         )}
 
         {isLoading && (
-          <div className="bg-[#fffaf0] border border-black/5 rounded-[2rem] p-10 flex items-center justify-center gap-3 text-zinc-500">
+          <div className="bg-[#fffaf0] border border-black/5 rounded-4xl p-10 flex items-center justify-center gap-3 text-zinc-500">
             <Loader2 className="animate-spin" />
             Carregando treinos e dietas...
           </div>
@@ -491,7 +491,7 @@ function Explorar() {
               return (
                 <article
                   key={publicacao.id}
-                  className="bg-[#fffaf0] border border-black/5 rounded-[2rem] p-6 md:p-7 shadow-sm hover:shadow-md transition"
+                  className="bg-[#fffaf0] border border-black/5 rounded-4xl p-6 md:p-7 shadow-sm hover:shadow-md transition"
                 >
                   <div className="flex gap-4">
                     <div

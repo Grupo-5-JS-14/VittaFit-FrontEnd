@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { Usuario } from '../models/Usuario'
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: 'http://localhost:4000'
 })
 
@@ -43,4 +43,3 @@ export const atualizar = async (url: string, dados: Object) => {
 export const deletar = async (url: string) => {
   await api.delete(url);
 };
-});
