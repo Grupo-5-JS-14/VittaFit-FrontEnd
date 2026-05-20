@@ -11,6 +11,8 @@ function Perfil() {
 
   const [filtro, setFiltro] = useState('tudo')
 
+  const [mostrarTabelaIMC, setMostrarTabelaIMC] = useState(false)
+
   const [rascunho, setRascunho] = useState<Usuario>({
     id: 0,
     nome: '',
@@ -25,7 +27,8 @@ function Perfil() {
   const [loading, setLoading] = useState(true)
   const [mensagem, setMensagem] = useState('')
 
-  const usuarioId = 3
+  const usuarioId = 4
+
 
   async function carregarUsuario() {
 
@@ -240,31 +243,39 @@ function Perfil() {
                   Email: {rascunho.usuario}
                 </p>
 
-                {/* IMC */}
-                <div
-                  className="
-                    mt-5
-                    inline-flex
-                    items-center
-                    gap-3
-                    border
-                    border-orange-500/10
-                    bg-orange-500/5
-                    px-5
-                    py-2
-                    rounded-full
-                  "
-                >
+  {/* IMC */}
+<div
+  onClick={() => setMostrarTabelaIMC(true)}
+  className="
+    mt-5
+    inline-flex
+    items-center
+    gap-4
+    border
+    border-orange-500/10
+    bg-orange-500/5
+    px-5
+    py-3
+    rounded-full
+    cursor-pointer
+    hover:bg-orange-500/10
+    transition-all
+  "
+>
 
-                  <span className="font-bold text-black/60">
-                    IMC
-                  </span>
+  <span className="font-bold text-black/60">
+    IMC
+  </span>
 
-                  <span className="text-2xl font-black text-black">
-                    {rascunho.imc}
-                  </span>
+  <span className="text-2xl font-black text-black">
+    {rascunho.imc}
+  </span>
 
-                </div>
+  <span className="text-xs text-black/40 ml-2">
+    Clique para ver tabela
+  </span>
+
+</div>
 
               </div>
 
@@ -694,6 +705,80 @@ function Perfil() {
 
       )}
 
+{/* TABELA IMC */}
+{mostrarTabelaIMC && (
+  <div
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-6"
+    onClick={() => setMostrarTabelaIMC(false)}
+  >
+
+    <div
+      className="bg-white w-full max-w-3xl rounded-[30px] shadow-2xl overflow-hidden"
+      onClick={(e) => e.stopPropagation()}
+    >
+
+      <div className="bg-linear-to-r from-green-600 to-orange-500 p-6 flex justify-between items-center">
+        <h2 className="text-2xl font-black text-white">
+          Tabela IMC
+        </h2>
+
+        <button
+          onClick={() => setMostrarTabelaIMC(false)}
+          className="text-white font-black text-xl"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div className="divide-y divide-black/5">
+
+        <div className="grid grid-cols-3 p-4 font-bold bg-black/5">
+          <span>IMC</span>
+          <span>Classificação</span>
+          <span>Risco</span>
+        </div>
+
+        <div className="grid grid-cols-3 p-4">
+          <span>&lt; 18,5</span>
+          <span>Abaixo do peso</span>
+          <span>Baixo</span>
+        </div>
+
+        <div className="grid grid-cols-3 p-4">
+          <span>18,5 – 24,9</span>
+          <span>Peso normal</span>
+          <span>Normal</span>
+        </div>
+
+        <div className="grid grid-cols-3 p-4">
+          <span>25 – 29,9</span>
+          <span>Sobrepeso</span>
+          <span>Moderado</span>
+        </div>
+
+        <div className="grid grid-cols-3 p-4">
+          <span>30 – 34,9</span>
+          <span>Obesidade I</span>
+          <span>Alto</span>
+        </div>
+
+        <div className="grid grid-cols-3 p-4">
+          <span>35 – 39,9</span>
+          <span>Obesidade II</span>
+          <span>Muito alto</span>
+        </div>
+
+        <div className="grid grid-cols-3 p-4">
+          <span>≥ 40</span>
+          <span>Obesidade III</span>
+          <span>Extremo</span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+)}
     </div>
   )
 }
