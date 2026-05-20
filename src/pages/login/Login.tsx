@@ -65,7 +65,7 @@ function Login() {
         setIsLogin(true);
       }
 
-      navigate("/login");
+      navigate("/home");
 
     } catch (error) {
 
