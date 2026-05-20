@@ -1,2 +1,25 @@
 @import "tailwindcss";
 
+/* 1. Mapeamento dos arquivos locais que você baixou */
+@font-face {
+  font-family: 'Kare';
+  src: url('./assets/kare-font/kare-trial.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Kare Light';
+  src: url('./assets/kare-font/kare-trial-light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* 2. Criando a classe utilitária no Tailwind moderno */
+@utility font-kare {
+  font-family: 'Kare', sans-serif;
+}
+
+@utility font-kare-light {
+  font-family: 'Kare Light', sans-serif;
+}
