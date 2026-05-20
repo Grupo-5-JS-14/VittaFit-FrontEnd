@@ -1,8 +1,29 @@
-import axios from "axios";
+import axios from 'axios'
+import type { Usuario } from '../models/Usuario'
 
-export const api = axios.create({
-  baseURL: "http://localhost:4000",
-});
+const api = axios.create({
+  baseURL: 'http://localhost:4000'
+})
+
+export async function buscarUsuario(id: number) {
+  const resposta = await api.get<Usuario>(
+    `/usuarios/${id}`
+  )
+
+  return resposta.data
+}
+
+export async function atualizarUsuario(
+  id: number,
+  dados: Usuario
+) {
+  const resposta = await api.put<Usuario>(
+    `/usuarios/${id}`,
+    dados
+  )
+
+  return resposta.data
+}
 
 export const buscar = async (url: string, setDados: Function) => {
   const resposta = await api.get(url);

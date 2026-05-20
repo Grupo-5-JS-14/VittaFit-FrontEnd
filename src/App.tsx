@@ -1,10 +1,11 @@
+import './App.css'
+import Perfil from './pages/perfil/Perfil'
+
 function App() {
 
   return (
     <>
-      <div className="flex">
-        <h2>Ola</h2>
-      </div>
+      <Perfil />
     </>
   )
 }
