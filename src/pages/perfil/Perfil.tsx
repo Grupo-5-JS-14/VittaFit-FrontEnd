@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { buscarUsuario, atualizarUsuario } from '../../services/Service' 
+import { buscarUsuario, atualizarUsuario, listarTreinos, listarDietas } from '../../services/Service' 
 import type { Usuario } from '../../models/Usuario'
 
 interface PerfilProps {
@@ -14,6 +14,8 @@ function Perfil({ isDarkMode = true, onAbrirCriarTreino, onAbrirMontarDieta }: P
   const [mostrarTabelaIMC, setMostrarTabelaIMC] = useState(false)
   const [loading, setLoading] = useState(true)
   const [mensagem, setMensagem] = useState('')
+  const [treinosUsuario, setTreinosUsuario] = useState<any[]>([])
+  const [dietasUsuario, setDietasUsuario] = useState<any[]>([])
 
   const [rascunho, setRascunho] = useState<Usuario>({
     id: 0,
@@ -26,23 +28,42 @@ function Perfil({ isDarkMode = true, onAbrirCriarTreino, onAbrirMontarDieta }: P
     imc: 0
   })
 
-  const usuarioId = 1 
+  const usuarioLogado = JSON.parse(
+  localStorage.getItem("usuario") || "{}"
+)
+
+const usuarioId = usuarioLogado.id
 
   async function carregarUsuario() {
     try {
       setLoading(true)
       const data = await buscarUsuario(usuarioId)
 
-      setRascunho({
-        id: data.id,
-        nome: data.nome,
-        usuario: data.usuario,
-        senha: data.senha,
-        foto: data.foto || '',
-        altura: Number(data.altura) || 0,
-        peso: Number(data.peso) || 0,
-        imc: Number(data.imc) || 0
-      })
+    setRascunho({
+      id: data.id,
+      nome: data.nome,
+      usuario: data.usuario,
+      senha: data.senha,
+      foto: data.foto || '',
+      altura: Number(data.altura) || 0,
+      peso: Number(data.peso) || 0,
+      imc: Number(data.imc) || 0
+    })
+
+    const todosTreinos = await listarTreinos()
+
+    const meusTreinos = todosTreinos.filter(
+      (treino: any) => treino.usuario?.id === usuarioId
+    )
+    setTreinosUsuario(meusTreinos)
+
+    const todasDietas = await listarDietas()
+
+    const minhasDietas = todasDietas.filter(
+      (dieta: any) => dieta.usuario?.id === usuarioId
+    )
+
+    setDietasUsuario(minhasDietas)
 
     } catch (error) {
       console.error("Erro ao carregar dados do usuário:", error)
@@ -254,9 +275,66 @@ function Perfil({ isDarkMode = true, onAbrirCriarTreino, onAbrirMontarDieta }: P
               ))}
             </div>
           </div>
-          <div className="border border-dashed rounded-3xl p-12 text-center text-sm font-light border-white/20 text-white/40">
-            Nenhuma publicação encontrada no filtro selecionado.
-          </div>
+            <div className="flex flex-col gap-4">
+
+              {/* TREINOS */}
+              {(filtro === 'tudo' || filtro === 'treino') &&
+                treinosUsuario.map((treino) => (
+                  <div
+                    key={treino.id}
+                    className="border border-white/10 rounded-2xl p-5 bg-white/5"
+                  >
+                    <span className="text-[10px] uppercase text-[#f27825] font-bold">
+                      Treino
+                    </span>
+
+                    <h3 className="text-lg font-bold uppercase mt-2">
+                      {treino.tipoTreino}
+                    </h3>
+
+                    <p className="text-sm text-white/70 mt-2">
+                      {treino.descricao}
+                    </p>
+
+                    <div className="flex gap-4 mt-4 text-xs uppercase text-white/50">
+                      <span>{treino.intensidade}</span>
+                      <span>{treino.data}</span>
+                    </div>
+                  </div>
+                ))}
+
+              {/* DIETAS */}
+              {(filtro === 'tudo' || filtro === 'dieta') &&
+                dietasUsuario.map((dieta) => (
+                  <div
+                    key={dieta.id}
+                    className="border border-white/10 rounded-2xl p-5 bg-white/5"
+                  >
+                    <span className="text-[10px] uppercase text-green-400 font-bold">
+                      Dieta
+                    </span>
+
+                    <h3 className="text-lg font-bold uppercase mt-2">
+                      {dieta.nome || 'Plano Alimentar'}
+                    </h3>
+
+                    <p className="text-sm text-white/70 mt-2">
+                      {dieta.descricao}
+                    </p>
+
+                    <div className="flex gap-4 mt-4 text-xs uppercase text-white/50">
+                      <span>{dieta.objetivo}</span>
+                    </div>
+                  </div>
+                ))}
+
+              {/* VAZIO */}
+              {treinosUsuario.length === 0 && dietasUsuario.length === 0 && (
+                <div className="border border-dashed rounded-3xl p-12 text-center text-sm font-light border-white/20 text-white/40">
+                  Nenhuma publicação encontrada no filtro selecionado.
+                </div>
+              )}
+            </div>
         </div>
       </div>
 
@@ -311,7 +389,7 @@ function Perfil({ isDarkMode = true, onAbrirCriarTreino, onAbrirMontarDieta }: P
               <div className="grid grid-cols-3 p-3 font-bold text-[#f27825] uppercase tracking-wider"><span>Métrica</span><span>Classificação</span><span>Risco</span></div>
               <div className="text-white/80">
                 <div className="grid grid-cols-3 p-3"><span>&lt; 18.5</span><span>Abaixo do peso</span><span>Baixo</span></div>
-                <div className="grid grid-cols-3 p-3 font-normal text-[#f27825]"><span>18.5 – 24.9</span><span>Peso ideal</span><span>Normal</span></div>
+                <div className="grid grid-cols-3 p-3 "><span>18.5 – 24.9</span><span>Peso ideal</span><span>Normal</span></div>
                 <div className="grid grid-cols-3 p-3"><span>25.0 – 29.9</span><span>Sobrepeso</span><span>Moderado</span></div>
                 <div className="grid grid-cols-3 p-3"><span>30.0 – 34.9</span><span>Obesidade grau I</span><span>Alto</span></div>
                 <div className="grid grid-cols-3 p-3"><span>35.0 – 39.9</span><span>Obesidade grau II</span><span>Muito alto</span></div>
