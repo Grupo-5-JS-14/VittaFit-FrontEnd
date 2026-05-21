@@ -290,6 +290,7 @@ export default function Navbar({
                   >
                     VF
                   </div>
+                </div>
 
                   <div>
                     <h3 className="font-bold text-lg">Atleta VittaFit</h3>
