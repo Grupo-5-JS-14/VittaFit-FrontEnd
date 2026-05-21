@@ -71,7 +71,8 @@ export default function Navbar({
 
   return (
     <>
-      <header className="absolute top-0 left-0 z-50 flex w-full items-center justify-between bg-transparent px-6 py-6 text-white md:px-12">
+      <header className={`absolute top-0 left-0 z-50 flex w-full items-center justify-between bg-transparent px-6 py-6 ${isDarkMode ? "text-white" : "text-[#074334]"} md:px-12`}>
+        
         <div className="text-4xl font-bold font-kare tracking-tighter">
           <Link to="/" onClick={fecharTudo} className={`transition-colors ${hoverColor}`}>
             VF
