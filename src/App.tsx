@@ -6,6 +6,7 @@ import Footer from "./components/footer/Footer";
 import Perfil from './pages/perfil/Perfil';
 import Login from "./pages/login/Login";
 import Explorar from "./pages/explorar/Explorar";
+import Sobre from "./pages/about/About";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -22,6 +23,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/perfil" element={<Perfil />} />
             <Route path="/explorar" element={<Explorar />} />
+            <Route path= "/sobre" element={<Sobre/>} />
           </Routes>
         </div>
         <Footer isDarkMode={isDarkMode} />
