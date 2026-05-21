@@ -9,10 +9,10 @@ interface ModalPostarProps {
     texto: string;
     imagemUrl?: string;
     tipo: "TREINO" | "DIETA";
-    // Atributos obrigatórios que vão direto no post
+   
     detalhesEspecificos: {
-      tipoCategoria: string; // tipoTreino ou tipo da dieta
-      atributoExtra: string;  // intensidade ou IMC
+      tipoCategoria: string; 
+      atributoExtra: string;  
     };
   }) => void;
 }
@@ -22,9 +22,8 @@ export default function ModalPostar({ isOpen, onClose, isDarkMode, onPostar }: M
   const [imagemUrl, setImagemUrl] = useState("");
   const [tipo, setTipo] = useState<"TREINO" | "DIETA">("TREINO");
 
-  // Estados para os atributos obrigatórios digitados manualmente
-  const [tipoCategoria, setTipoCategoria] = useState(""); // Ex: "Hipertrofia" ou "Cutting"
-  const [atributoExtra, setAtributoExtra] = useState("");  // Ex: "Alta" ou "22.5"
+  const [tipoCategoria, setTipoCategoria] = useState(""); 
+  const [atributoExtra, setAtributoExtra] = useState("");  
 
   if (!isOpen) return null;
 
@@ -42,7 +41,6 @@ export default function ModalPostar({ isOpen, onClose, isDarkMode, onPostar }: M
       },
     });
 
-    // Reseta tudo
     setTexto("");
     setImagemUrl("");
     setTipoCategoria("");

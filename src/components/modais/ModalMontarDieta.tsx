@@ -14,10 +14,10 @@ interface ModalMontarDietaProps {
 }
 
 export default function ModalMontarDieta({ isOpen, onClose, isDarkMode, onMontarDieta }: ModalMontarDietaProps) {
-  const [tipo, setTipo] = useState("");         // Ex: "Cutting Estratégico", "Bulking Limpo"
-  const [imc, setImc] = useState("");           // Valor do IMC (será convertido para número)
-  const [descricao, setDescricao] = useState(""); // Ex: "Café da manhã: 3 ovos, 200g de arroz..."
-  const [data, setData] = useState("");         // Data do planejamento
+  const [tipo, setTipo] = useState("");         
+  const [imc, setImc] = useState("");           
+  const [descricao, setDescricao] = useState(""); 
+  const [data, setData] = useState("");        
 
   if (!isOpen) return null;
 
@@ -27,12 +27,12 @@ export default function ModalMontarDieta({ isOpen, onClose, isDarkMode, onMontar
 
     onMontarDieta({
       tipo: tipo.trim(),
-      imc: Number(imc), // Convertendo a string do input para number exigido pela model
+      imc: Number(imc), 
       descricao: descricao.trim(),
       data,
     });
 
-    // Limpa os campos após o envio com sucesso
+    
     setTipo("");
     setImc("");
     setDescricao("");

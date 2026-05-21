@@ -1,16 +1,14 @@
-import React from "react";
 
 interface GaleriaProps {
   isDarkMode: boolean;
 }
 
 export default function GaleriaInspiracao({ isDarkMode }: GaleriaProps) {
-  // 4 Fotos fixas de alta qualidade focadas no universo fitness/saúde
   const fotos = [
     {
       url: "https://i.pinimg.com/736x/8f/13/61/8f1361f15ad674af8ff49424452a2fa1.jpg",
       alt: "Foco no treino",
-      gridClass: "md:col-span-2 md:row-span-2 h-[420px]", // Foto grande de destaque
+      gridClass: "md:col-span-2 md:row-span-2 h-[420px]", 
     },
     {
       url: "https://i1-e.pinimg.com/webp85/736x/2d/2d/bc/2d2dbce80ea0060c008a046a8bc8395b.webp",

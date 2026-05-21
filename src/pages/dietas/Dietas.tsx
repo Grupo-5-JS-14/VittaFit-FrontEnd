@@ -18,7 +18,6 @@ export default function Dietas({ isDarkMode = true }: DietasProps) {
   const [abrirForm, setAbrirForm] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState("TODAS");
 
-  // ARRAY ESTRUTURADO PARA O MOSAICO DE INFRAESTRUTURA/CONSCIENTIZAÇÃO
   const sugestoesMindset = [
     {
       tipo: "texto",

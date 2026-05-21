@@ -21,7 +21,6 @@ function Treinos({ isDarkMode = true }: TreinosProps) {
   const [filtroTexto, setFiltroTexto] = useState("");
   const [filtroIntensidade, setFiltroIntensidade] = useState("TODAS");
 
-  // Array de dados dos cards de sugestões e fotos conceituais (Grid Assimétrico)
   const sugestoesMindset = [
     {
       tipo: "texto",

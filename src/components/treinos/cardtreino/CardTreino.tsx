@@ -19,7 +19,6 @@ function CardTreino({ treino, isDarkMode, onDeletar }: CardTreinoProps) {
     });
   }
 
-  // Determina as cores da tag de intensidade dinamicamente com base no tema e valor
   const eIntensa = treino.intensidade === "INTENSA";
 
   return (

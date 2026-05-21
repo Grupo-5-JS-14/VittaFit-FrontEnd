@@ -5,7 +5,7 @@ import { Search, Compass, User, Menu, X, ArrowRight, Settings, LogOut, ShieldAle
 interface NavBarProps {
   isDarkMode: boolean;
   setIsDarkMode: (value: boolean) => void;
-  onAbrirPostar: () => void; // <-- ADICIONADO PARA INTEGRAÇÃO COM O MODAL GLOBAL
+  onAbrirPostar: () => void; 
 }
 
 export default function NavBar({ isDarkMode, setIsDarkMode, onAbrirPostar }: NavBarProps) {
@@ -24,13 +24,11 @@ export default function NavBar({ isDarkMode, setIsDarkMode, onAbrirPostar }: Nav
     setIsMenuOpen(false);
   };
 
-  // Classes dinâmicas para as gavetas laterais
   const themeDrawerBg = isDarkMode ? 'bg-[#074334] text-white' : 'bg-white text-[#074334]';
   const themeInputBg = isDarkMode ? 'bg-[#053227] border-white/20 text-white placeholder-gray-400' : 'bg-gray-50 border-[#074334]/20 text-[#074334]';
   const themeCardBg = isDarkMode ? 'bg-[#053227] border-white/10' : 'bg-gray-50 border-gray-100';
   const themeTextMuted = isDarkMode ? 'text-gray-300' : 'text-gray-500';
 
-  // Hover dinâmico dos links dependendo do tema ativo
   const hoverColor = isDarkMode ? 'hover:text-[#f27825]' : 'hover:text-[#074334]';
 
   return (

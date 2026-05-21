@@ -6,15 +6,12 @@ interface FooterProps {
 }
 
 function Footer({ isDarkMode }: FooterProps) {
-  // Cores dinâmicas para o container principal do Footer baseado no tema global
   const footerBg = isDarkMode ? "bg-[#053227] text-white" : "bg-[#074334] text-white";
   
-  // Hovers e Destaques invertem inteligentemente para garantir legibilidade e contraste
   const highlightText = isDarkMode ? "text-[#f27825]" : "text-[#f27825]";
   const linkHover = isDarkMode ? "hover:text-[#f27825]" : "hover:text-[#f27825]/80";
   const bottomLinkHover = isDarkMode ? "hover:text-white" : "hover:text-[#f27825]";
 
-  // Badge da logo no rodapé adaptado para a estética limpa e profissional
   const logoBadgeStyle = `flex items-center gap-2 shrink-0 bg-white border border-gray-100 p-2.5 rounded-xl shadow-lg shadow-black/5 transition-all`;
 
   return (

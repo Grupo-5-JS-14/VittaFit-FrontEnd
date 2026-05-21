@@ -84,9 +84,7 @@ export default function Grupo05({ variante = "grande", isDarkMode = true }: Grup
   const pessoa = integrantes[index];
   const compacto = variante === "compacto";
 
-  // =========================================================================
-  // VISTA COMPACTA (Usada dentro do seu novo Footer)
-  // =========================================================================
+ 
   if (compacto) {
     return (
       <div className="flex flex-col items-center gap-3 w-full">
@@ -156,9 +154,6 @@ export default function Grupo05({ variante = "grande", isDarkMode = true }: Grup
     );
   }
 
-  // =========================================================================
-  // VISTA GRANDE (Usada na página Sobre Nós ou Painéis dedicados)
-  // =========================================================================
   return (
     <div className="flex flex-col items-center gap-6">
       <div className="flex items-center gap-4 sm:gap-8">
@@ -188,7 +183,7 @@ export default function Grupo05({ variante = "grande", isDarkMode = true }: Grup
               alt={pessoa.nome}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
 
           <div className="p-6 flex flex-col items-center text-center">

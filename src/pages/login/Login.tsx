@@ -22,8 +22,8 @@ function Login({ isDarkMode = true }: LoginProps) {
     senha: "",
     confirmarSenha: "",
     foto: "",
-    peso: "",   // Adicionado para o fluxo de IMC
-    altura: "", // Adicionado para o fluxo de IMC
+    peso: "",   
+    altura: "", 
   });
 
   function atualizarLogin(e: React.ChangeEvent<HTMLInputElement>) {
@@ -44,7 +44,6 @@ function Login({ isDarkMode = true }: LoginProps) {
     try {
       console.log("Autenticando:", credenciais);
       
-      // Simulação de chamada de API
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       navigate("/perfil");
@@ -68,8 +67,6 @@ function Login({ isDarkMode = true }: LoginProps) {
 
     setLoading(true);
     try {
-      // Montamos o objeto convertendo Peso e Altura para Number
-      // para que o NestJS consiga rodar a lógica matemática do IMC
       const dadosParaEnviar = {
         nome: registro.nome,
         usuario: registro.usuario,
@@ -81,8 +78,6 @@ function Login({ isDarkMode = true }: LoginProps) {
 
       console.log("Cadastrando usuário na service do NestJS:", dadosParaEnviar);
       
-      // Chame a sua função de API aqui se necessário, ex:
-      // await cadastrarUsuario(dadosParaEnviar);
       
       await new Promise((resolve) => setTimeout(resolve, 1500));
       

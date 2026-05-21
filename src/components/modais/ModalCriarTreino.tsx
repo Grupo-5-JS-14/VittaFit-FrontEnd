@@ -14,10 +14,10 @@ interface ModalCriarTreinoProps {
 }
 
 export default function ModalCriarTreino({ isOpen, onClose, isDarkMode, onCriarTreino }: ModalCriarTreinoProps) {
-  const [tipoTreino, setTipoTreino] = useState("");     // Ex: "A - Peito e Tríceps"
-  const [intensidade, setIntensidade] = useState("");   // Ex: "Alta"
-  const [descricao, setDescricao] = useState("");       // Ex: "4x10 Supino, 3x12 Crossover..."
-  const [data, setData] = useState("");                 // Data do treino
+  const [tipoTreino, setTipoTreino] = useState("");     
+  const [intensidade, setIntensidade] = useState("");   
+  const [descricao, setDescricao] = useState("");       
+  const [data, setData] = useState("");                 
 
   if (!isOpen) return null;
 
@@ -29,10 +29,10 @@ export default function ModalCriarTreino({ isOpen, onClose, isDarkMode, onCriarT
       tipoTreino: tipoTreino.trim(),
       intensidade,
       descricao: descricao.trim(),
-      data, // Formato YYYY-MM-DD nativo do input
+      data, 
     });
 
-    // Limpa os campos após o envio
+    
     setTipoTreino("");
     setIntensidade("");
     setDescricao("");
