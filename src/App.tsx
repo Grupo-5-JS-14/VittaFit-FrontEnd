@@ -12,7 +12,7 @@ import Treinos from "./pages/treinos/Treinos";
 import Dietas from "./pages/dietas/Dietas";
 import ModalPostar from "./components/modais/ModalPostar";
 import ModalCriarTreino from "./components/modais/ModalCriarTreino";
-import ModalMontarDieta from "./components/modais/ModalMontarDieta"; // <-- IMPORTAÇÃO ADICIONADA
+import ModalMontarDieta from "./components/modais/ModalMontarDieta"; 
 
 function AppContent({ isDarkMode, setIsDarkMode }: { 
   isDarkMode: boolean; 
@@ -21,12 +21,12 @@ function AppContent({ isDarkMode, setIsDarkMode }: {
   const location = useLocation();
   const esconderLayoutGlobal = location.pathname === "/login";
 
-  // Estados para controlar as aberturas dos Modais globais
+
   const [modalPostarAberto, setModalPostarAberto] = useState(false);
   const [modalTreinoAberto, setModalTreinoAberto] = useState(false);
-  const [modalDietaAberto, setModalDietaAberto] = useState(false); // <-- ESTADO ADICIONADO
+  const [modalDietaAberto, setModalDietaAberto] = useState(false); 
 
-  // Função adaptada para a assinatura nova do ModalPostar
+ 
   const handleNovaPublicacao = (dados: { 
     texto: string; 
     imagemUrl?: string; 
@@ -34,10 +34,9 @@ function AppContent({ isDarkMode, setIsDarkMode }: {
     detalhesEspecificos: { tipoCategoria: string; atributoExtra: string };
   }) => {
     console.log("Enviando nova publicação manual para a API:", dados);
-    // Exemplo futuro: await cadastrar("/postagens", dados);
+    
   };
 
-  // Função para lidar com o salvamento do treino criado no modal
   const handleNovoTreino = (dados: {
     tipoTreino: string;
     intensidade: string;
@@ -45,10 +44,8 @@ function AppContent({ isDarkMode, setIsDarkMode }: {
     data: string;
   }) => {
     console.log("Salvando novo treino na API:", dados);
-    // Exemplo futuro: await cadastrar("/treinos", dados);
   };
 
-  // Função para lidar com o salvamento da dieta criada no modal
   const handleNovaDieta = (dados: {
     tipo: string;
     imc: number;
@@ -56,7 +53,6 @@ function AppContent({ isDarkMode, setIsDarkMode }: {
     data: string;
   }) => {
     console.log("Salvando nova dieta na API:", dados);
-    // Exemplo futuro: await cadastrar("/dietas", dados);
   };
 
   return (
