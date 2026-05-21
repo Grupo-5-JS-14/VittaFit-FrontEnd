@@ -9,6 +9,7 @@ interface FormDietaProps {
   onFechar: () => void;
 }
 
+
 function FormDieta({
   isDarkMode,
   onAdicionar,
