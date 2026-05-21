@@ -36,7 +36,7 @@ function CardDieta({ dieta, isDarkMode, onDeletar }: CardDietaProps) {
             />
 
             <div className="flex flex-col justify-center">
-              <h2 className="font-kare text-xl md:text-2xl font-black uppercase tracking-tight text-white leading-none">
+              <h2 className=" text-xl md:text-2xl font-black uppercase tracking-tight text-white leading-none">
                 Refeição - {dieta.tipo || "Geral"}
               </h2>
               <span className={`mt-2 w-fit rounded-lg px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-white/90 ${
@@ -58,7 +58,7 @@ function CardDieta({ dieta, isDarkMode, onDeletar }: CardDietaProps) {
             {onDeletar && (
               <button
                 type="button"
-                onClick={() => onDeletar(dieta.id)}
+                onClick={() => onDeletar(dietas.id)}
                 className={`cursor-pointer p-2 rounded-xl border transition-all duration-300 ${
                   isDarkMode 
                     ? "bg-white/5 border-white/10 text-white/40 hover:text-white hover:bg-red-500/20 hover:border-red-500/30" 
