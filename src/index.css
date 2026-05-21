@@ -15,7 +15,6 @@
   font-style: normal;
 }
 
-/* 2. Criando a classe utilitária no Tailwind moderno */
 @utility font-kare {
   font-family: 'Kare', sans-serif;
 }
