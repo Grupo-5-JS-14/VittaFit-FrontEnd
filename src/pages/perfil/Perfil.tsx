@@ -8,7 +8,7 @@ interface PerfilProps {
   onAbrirMontarDieta: () => void  
 }
 
-function Perfil({ isDarkMode = true, onAbrirCriarTreino, onAbrirMontarDieta }: PerfilProps) {
+function Perfil({ isDarkMode = true }: PerfilProps) {
   const [editando, setEditando] = useState(false)
   const [filtro, setFiltro] = useState('tudo')
   const [mostrarTabelaIMC, setMostrarTabelaIMC] = useState(false)
@@ -136,7 +136,7 @@ const usuarioId = usuarioLogado.id
           <div className={`w-12 h-12 border-4 rounded-full animate-spin ${
             isDarkMode ? 'border-[#f27825] border-t-transparent' : 'border-[#074334] border-t-transparent'
           }`}></div>
-          <h1 className={`text-xl font-bold tracking-widest uppercase font-kare ${isDarkMode ? 'text-white' : 'text-[#074334]'}`}>
+          <h1 className={`text-xl font-bold font-kare tracking-widest uppercase ${isDarkMode ? 'text-white' : 'text-[#074334]'}`}>
             VittaFit
           </h1>
         </div>
@@ -162,7 +162,7 @@ const usuarioId = usuarioLogado.id
             }`}>
               Performance Dashboard
             </p>
-            <h1 className="text-4xl sm:text-5xl font-bold font-kare tracking-tight uppercase">Meu Perfil</h1>
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight uppercase">Meu Perfil</h1>
           </div>
           <button
             onClick={() => setEditando(true)}
@@ -178,10 +178,10 @@ const usuarioId = usuarioLogado.id
       </div>
 
       {/* CONTEÚDO PRINCIPAL */}
-      <div className="px-6 max-w-6xl mx-auto mt-12 relative z-20 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="px-6 max-w-6xl mx-auto mt-12 relative z-20 flex flex-col items-center justify-center gap-8">
         
         {/* CARD PRINCIPAL DO USUÁRIO */}
-        <div className={`rounded-3xl p-8 shadow-2xl transition-all duration-300 border flex flex-col justify-between gap-8 backdrop-blur-xl ${
+        <div className={`w-auto rounded-3xl p-8 shadow-2xl transition-all duration-300 border flex flex-col justify-between gap-8 backdrop-blur-xl ${
           isDarkMode 
             ? 'bg-white/3 border-white/10 shadow-black/40' 
             : 'bg-black/5 border-white/10 shadow-black/10'
@@ -198,7 +198,7 @@ const usuarioId = usuarioLogado.id
             )}
 
             <div className="text-center sm:text-left flex-1">
-              <h2 className="text-3xl font-bold font-kare tracking-tight uppercase mb-1">{rascunho.nome || "Usuario"}</h2>
+              <h2 className="text-3xl font-bold tracking-tight uppercase mb-1">{rascunho.nome || "Usuario"}</h2>
               <p className={`text-sm font-light tracking-wide mb-4 ${isDarkMode ? 'text-white/50' : 'text-white/70'}`}>{rascunho.usuario}</p>
 
               {/* MÓDULO IMC */}
@@ -221,44 +221,20 @@ const usuarioId = usuarioLogado.id
           <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/10">
             <div className={`border rounded-2xl p-4 text-center backdrop-blur-md ${isDarkMode ? 'bg-white/2 border-white/5' : 'bg-black/10 border-white/15'}`}>
               <p className="text-[10px] uppercase tracking-widest mb-1 text-white/60">Peso Corporal</p>
-              <h3 className="text-2xl font-bold font-kare">{rascunho.peso}<span className={`text-xs ml-1 ${isDarkMode ? 'text-[#f27825]' : 'text-[#074334]'}`}>KG</span></h3>
+              <h3 className="text-2xl font-bold ">{rascunho.peso}<span className={`text-xs ml-1 ${isDarkMode ? 'text-[#f27825]' : 'text-[#074334]'}`}>KG</span></h3>
             </div>
             <div className={`border rounded-2xl p-4 text-center backdrop-blur-md ${isDarkMode ? 'bg-white/2 border-white/5' : 'bg-black/10 border-white/15'}`}>
               <p className="text-[10px] uppercase tracking-widest mb-1 text-white/60">Altura</p>
-              <h3 className="text-2xl font-bold font-kare">{rascunho.altura}<span className={`text-xs ml-1 ${isDarkMode ? 'text-[#f27825]' : 'text-[#074334]'}`}>M</span></h3>
+              <h3 className="text-2xl font-bold ">{rascunho.altura}<span className={`text-xs ml-1 ${isDarkMode ? 'text-[#f27825]' : 'text-[#074334]'}`}>M</span></h3>
             </div>
           </div>
         </div>
-
-        {/* ATALHOS DE GESTÃO */}
-        <div className={`rounded-3xl p-8 shadow-2xl border flex flex-col justify-center gap-4 backdrop-blur-xl ${
-          isDarkMode ? 'bg-white/3 border-white/10 shadow-black/40' : 'bg-black/5 border-white/10 shadow-black/10'
-        }`}>
-          <p className="text-xs font-semibold uppercase tracking-widest mb-2 text-center lg:text-left text-white/60">Ações rápidas</p>
-          
-          <button 
-            onClick={onAbrirCriarTreino} 
-            className={`w-full font-bold py-4 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 shadow-lg active:scale-[0.99] cursor-pointer ${
-              isDarkMode 
-                ? 'bg-[#f27825] hover:bg-[#d9651c] text-white shadow-[#f27825]/10' 
-                : 'bg-[#074334] hover:bg-[#052b21] text-white shadow-black/10'
-            }`}
-          >
-            Criar Novo Treino
-          </button>
-          
-          <button 
-            onClick={onAbrirMontarDieta} 
-            className="w-full font-bold py-4 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 active:scale-[0.99] border cursor-pointer bg-white/5 hover:bg-white/10 border-white/10 text-white"
-          >
-            Montar Nova Dieta
-          </button>
-        </div>
+        
 
         {/* SEÇÃO DE PUBLICAÇÕES */}
         <div className="lg:col-span-3 mt-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <h2 className="text-2xl font-bold font-kare tracking-tight uppercase">Minhas Postagens</h2>
+            <h2 className="text-2xl font-bold tracking-tight uppercase">Minhas Postagens</h2>
             <div className="border p-1.5 rounded-xl flex gap-1 w-fit bg-white/5 border-white/10">
               {['tudo', 'treino', 'dieta'].map((tipo) => (
                 <button 
@@ -345,7 +321,7 @@ const usuarioId = usuarioLogado.id
             isDarkMode ? 'bg-[#053227] border-white/10 text-white' : 'bg-[#074334] border-white/20 text-white'
           }`}>
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
-              <h2 className="text-2xl font-bold font-kare uppercase tracking-tight">Editar Dados</h2>
+              <h2 className="text-2xl font-bold uppercase tracking-tight">Editar Dados</h2>
               <button type="button" onClick={() => setEditando(false)} className="w-8 h-8 rounded-full border flex items-center justify-center text-xs bg-white/5 border-white/10 text-white cursor-pointer hover:bg-white/10">✕</button>
             </div>
             <div className="space-y-4">
@@ -382,7 +358,7 @@ const usuarioId = usuarioLogado.id
             isDarkMode ? 'bg-[#053227] border-white/10 text-white' : 'bg-[#074334] border-white/20 text-white'
           }`} onClick={(e) => e.stopPropagation()}>
             <div className="p-6 flex justify-between items-center border-b border-white/10 bg-white/5">
-              <h2 className="text-xl font-bold font-kare uppercase tracking-tight">Tabela Oficial de Classificação IMC</h2>
+              <h2 className="text-xl font-bold uppercase tracking-tight">Tabela Oficial de Classificação IMC</h2>
               <button onClick={() => setMostrarTabelaIMC(false)} className="font-bold text-sm text-[#f27825] cursor-pointer">✕</button>
             </div>
             <div className="p-4 text-xs font-light tracking-wide divide-y divide-white/5">
