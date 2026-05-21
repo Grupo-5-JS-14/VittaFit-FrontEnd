@@ -5,9 +5,10 @@ import { Search, Compass, User, Menu, X, ArrowRight, Settings, LogOut, ShieldAle
 interface NavBarProps {
   isDarkMode: boolean;
   setIsDarkMode: (value: boolean) => void;
+  onAbrirPostar: () => void; // <-- ADICIONADO PARA INTEGRAÇÃO COM O MODAL GLOBAL
 }
 
-export default function NavBar({ isDarkMode, setIsDarkMode }: NavBarProps) {
+export default function NavBar({ isDarkMode, setIsDarkMode, onAbrirPostar }: NavBarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);   
   const [isExploreOpen, setIsExploreOpen] = useState(false); 
@@ -29,8 +30,7 @@ export default function NavBar({ isDarkMode, setIsDarkMode }: NavBarProps) {
   const themeCardBg = isDarkMode ? 'bg-[#053227] border-white/10' : 'bg-gray-50 border-gray-100';
   const themeTextMuted = isDarkMode ? 'text-gray-300' : 'text-gray-500';
 
-  // 1. CRIAMOS UMA VARIÁVEL PARA CONTROLAR O HOVER DINÂMICO DOS LINKS
-  // Se for escuro, o hover é laranja. Se for claro (fundo laranja), o hover vira verde escuro!
+  // Hover dinâmico dos links dependendo do tema ativo
   const hoverColor = isDarkMode ? 'hover:text-[#f27825]' : 'hover:text-[#074334]';
 
   return (
@@ -47,11 +47,17 @@ export default function NavBar({ isDarkMode, setIsDarkMode }: NavBarProps) {
           </Link>
         </div>
 
-        {/* Links Centrais com hover dinâmico */}
-        <nav className="hidden gap-8 text-sm font-medium tracking-wide uppercase md:flex">
+        {/* Links Centrais com gatilho de modal no "Nova Postagem" */}
+        <nav className="hidden gap-8 text-sm font-medium tracking-wide uppercase md:flex items-center">
           <Link to="/treinos" className={`transition-colors ${hoverColor}`}>Treinos</Link>
           <Link to="/dietas" className={`transition-colors ${hoverColor}`}>Dietas</Link>
-          <Link to="/postar" className={`transition-colors ${hoverColor}`}>Nova Postagem</Link>
+          <button 
+            type="button"
+            onClick={onAbrirPostar} 
+            className={`transition-colors text-sm font-medium tracking-wide uppercase cursor-pointer outline-none ${hoverColor}`}
+          >
+            Nova Postagem
+          </button>
         </nav>
 
         {/* Ícones da Direita com hover dinâmico */}
@@ -233,14 +239,21 @@ export default function NavBar({ isDarkMode, setIsDarkMode }: NavBarProps) {
       )}
 
       {/* =========================================================================
-          6. MENU HAMBÚRGUER MOBILE com hover dinâmico
+          6. MENU HAMBÚRGUER MOBILE com gatilho de modal no "Nova Postagem"
           ========================================================================= */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#074334]/98 text-xl font-semibold space-y-6 text-white md:hidden">
           <Link to="/" onClick={() => setIsMenuOpen(false)} className={`transition-colors ${hoverColor}`}>Home</Link>
           <Link to="/treinos" onClick={() => setIsMenuOpen(false)} className={`transition-colors ${hoverColor}`}>Treinos</Link>
           <Link to="/dietas" onClick={() => setIsMenuOpen(false)} className={`transition-colors ${hoverColor}`}>Dietas</Link>
-          <Link to="/postar" onClick={() => setIsMenuOpen(false)} className={`transition-colors ${hoverColor}`}>Nova Postagem</Link>
+          
+          <button 
+            type="button"
+            onClick={() => { setIsMenuOpen(false); onAbrirPostar(); }} 
+            className={`transition-colors text-xl font-semibold cursor-pointer outline-none bg-transparent ${hoverColor}`}
+          >
+            Nova Postagem
+          </button>
           
           <button onClick={openProfileDrawer} className={`font-semibold transition-colors ${hoverColor}`}>
             {isAuthenticated ? 'Meu Perfil' : 'Entrar / Cadastrar'}

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 export default function Hero({ isDarkMode }: { isDarkMode: boolean }) {
   
-  // 1. O ARRAY ÚNICO COM AS 4 FOTOS DO SEU APP
   const slides = [
     "https://images.unsplash.com/photo-1548690312-e3b507d8c110?q=80&w=2200&auto=format&fit=crop", 
     "https://i.pinimg.com/736x/c4/7f/93/c47f93f98ac6c8596bbba8127b813620.jpg", 
@@ -13,7 +12,6 @@ export default function Hero({ isDarkMode }: { isDarkMode: boolean }) {
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Carrossel automático rodando a cada 5 segundos
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -22,7 +20,6 @@ export default function Hero({ isDarkMode }: { isDarkMode: boolean }) {
   }, [slides.length]);
 
   return (
-    // Fundo muda de acordo com o tema: Verde no escuro, Laranja no claro
     <section className={`relative h-screen w-full overflow-hidden transition-colors duration-500 ${
       isDarkMode ? 'bg-[#074334]' : 'bg-[#f27825]'
     }`}>
@@ -39,7 +36,6 @@ export default function Hero({ isDarkMode }: { isDarkMode: boolean }) {
             <img
               src={image}
               alt={`VittaFit Banner ${index + 1}`}
-              // Ajuste automático de filtros para a mesma imagem casar com os dois temas
               className={`h-full w-full object-cover mix-blend-luminosity scale-100 transition-all duration-500 ${
                 isDarkMode 
                   ? 'brightness-[0.6] opacity-35' 
@@ -50,10 +46,10 @@ export default function Hero({ isDarkMode }: { isDarkMode: boolean }) {
         ))}
         
         {/* Camadas de cor sobrepostas que alteram o tom das fotos fixas */}
-        <div className={`absolute inset-0 z-[1] transition-colors duration-500 ${
+        <div className={`absolute inset-0 z-1 transition-colors duration-500 ${
           isDarkMode ? 'bg-[#074334]/40' : 'bg-[#f27825]/20'
         }`} />
-        <div className={`absolute inset-0 z-[2] transition-all duration-500 bg-gradient-to-r ${
+        <div className={`absolute inset-0 z-2 transition-all duration-500 bg-linear-to-r ${
           isDarkMode ? 'from-[#074334]/90 via-[#074334]/40' : 'from-[#f27825]/95 via-[#f27825]/50'
         } to-transparent`} />
       </div>

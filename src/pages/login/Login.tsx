@@ -1,355 +1,407 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { useNavigate } from "react-router-dom"; 
 
-import { api } from "../../services/Service";
-import type { Usuario } from "../../models/Usuario";
+interface LoginProps {
+  isDarkMode?: boolean;
+}
 
-function Login() {
-  const navigate = useNavigate();
-
+function Login({ isDarkMode = true }: LoginProps) {
+  const navigate = useNavigate(); 
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState("");
 
-  const [usuario, setUsuario] =
-    useState<Usuario>({
-      nome: "",
-      usuario: "",
-      senha: "",
-      foto: "",
-      altura: 0,
-      peso: 0,
-    });
+  const [credenciais, setCredenciais] = useState({
+    usuario: "",
+    senha: "",
+  });
 
-  function atualizarEstado(
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
-    setUsuario({
-      ...usuario,
-      [e.target.name]: e.target.value,
-    });
+  const [registro, setRegistro] = useState({
+    nome: "",
+    usuario: "",
+    senha: "",
+    confirmarSenha: "",
+    foto: "",
+    peso: "",   // Adicionado para o fluxo de IMC
+    altura: "", // Adicionado para o fluxo de IMC
+  });
+
+  function atualizarLogin(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setCredenciais({ ...credenciais, [name]: value });
   }
 
-  async function handleSubmit(
-    e: React.FormEvent
-  ) {
+  function atualizarRegistro(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setRegistro({ ...registro, [name]: value });
+  }
+
+  async function executarLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setErro("");
+    setLoading(true);
 
     try {
+      console.log("Autenticando:", credenciais);
+      
+      // Simulação de chamada de API
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      if (isLogin) {
+      navigate("/perfil");
 
-        const resposta = await api.post(
-          "/usuarios",
-          {
-            usuario: usuario.usuario,
-            senha: usuario.senha,
-          }
-        );
+    } catch (err) {
+      console.error(err);
+      setErro("Usuário ou senha inválidos.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
-        localStorage.setItem(
-          "usuario",
-          JSON.stringify(resposta.data)
-        );
+  async function ejecutarRegistro(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setErro("");
 
-        alert("Login realizado!");
+    if (registro.senha !== registro.confirmarSenha) {
+      setErro("As senhas não coincidem.");
+      return;
+    }
 
-      } else {
+    setLoading(true);
+    try {
+      // Montamos o objeto convertendo Peso e Altura para Number
+      // para que o NestJS consiga rodar a lógica matemática do IMC
+      const dadosParaEnviar = {
+        nome: registro.nome,
+        usuario: registro.usuario,
+        senha: registro.senha,
+        foto: registro.foto,
+        peso: Number(registro.peso) || 0,
+        altura: Number(registro.altura) || 0,
+      };
 
-        await api.post(
-          "/usuarios",
-          usuario
-        );
-
-        alert("Usuário cadastrado!");
-
-        setIsLogin(true);
-      }
-
-      navigate("/login");
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert(
-        "Erro ao autenticar usuário!"
-      );
+      console.log("Cadastrando usuário na service do NestJS:", dadosParaEnviar);
+      
+      // Chame a sua função de API aqui se necessário, ex:
+      // await cadastrarUsuario(dadosParaEnviar);
+      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      
+      setIsLogin(true);
+    } catch (err) {
+      console.error(err);
+      setErro("Erro ao criar conta. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <section className="min-h-screen bg-[#F7FAF7] flex ">
+    <div
+      className={`
+        min-h-screen flex items-center justify-center p-6 transition-colors duration-300 font-sans relative overflow-hidden
+        ${isDarkMode ? "bg-[#053227] text-white" : "bg-[#F8F9FA] text-zinc-900"}
+      `}
+    >
+      {/* BACKGROUND VIDEO */}
+      {isDarkMode && (
+        <div className="absolute inset-0 w-full h-full z-0 pointer-events-none overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-30"
+          >
+            <source src="src\assets\vittafit.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-transparent via-[#053227]/70 to-[#053227]" />
+        </div>
+      )}
 
-      {/* IMAGEM */}
-      <div className="w-full lg:w-1/2  p-5 ">
-        <img
-          src="/public/person-jogging-park.jpg"
-          alt="VittaFit"
-          className="w-full h-full object-cover object-center rounded-3xl shadow-2xl"
-        />
-      </div>
+      {/* CARD DE AUTENTICAÇÃO / REGISTRO */}
+      <div
+        className={`
+          w-full max-w-md rounded-[35px] p-8 sm:p-10 shadow-2xl relative z-10 transition-all duration-300 border
+          ${
+            isDarkMode
+              ? "bg-white/5 backdrop-blur-xl border-white/10 shadow-black/40"
+              : "bg-white border-zinc-200/80 shadow-zinc-300/50"
+          }
+        `}
+      >
+        {/* BRAND HEADLINE */}
+        <div className="text-center mb-6">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#f27825] mb-1">
+            {isLogin ? "Welcome to Performance" : "Comece sua jornada"}
+          </p>
+          <h1 className="text-4xl font-bold font-kare tracking-tighter uppercase">
+            Vitta<span className="text-[#f27825]">Fit</span>
+          </h1>
+          <p
+            className={`text-xs font-light mt-2 ${isDarkMode ? "text-white/50" : "text-zinc-500"}`}
+          >
+            {isLogin
+              ? "Acesse sua conta para gerenciar sua evolução."
+              : "Crie sua conta de alta performance."}
+          </p>
+        </div>
 
-      {/* FORM */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-10">
-
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.3,
-          }}
-          className=" w-full max-w-md rounded-3xl bg-white/70 backdrop-blur-xl border border-white/40 shadow-xl p-8">
-
-          {/* LOGO */}
-          <div className="mb-10">
-
-            <h1 className="text-3xl font-semibold text-[#1F2937]">VittaFit</h1>
-
-            <p className="text-[#6B7280] mt-2">Mais constância. Mais disciplina. Mais resultado.</p>
+        {erro && (
+          <div className="mb-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium text-center">
+            {erro}
           </div>
+        )}
 
-          {/* TOGGLE */}
-          <div className="relative flex bg-[#E5E7EB] p-1 rounded-full mb-10">
+        {isLogin ? (
+          <form onSubmit={executarLogin} className="space-y-4">
+            <div>
+              <label
+                className={`block mb-1 text-xs font-semibold uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-zinc-500"}`}
+              >
+                E-mail / Usuário
+              </label>
+              <input
+                type="text"
+                name="usuario"
+                required
+                value={credenciais.usuario}
+                onChange={atualizarLogin}
+                placeholder="seu@email.com"
+                className={`w-full rounded-xl p-3 text-sm outline-none transition-all border ${
+                  isDarkMode
+                    ? "bg-white/5 border-white/10 text-white focus:border-[#f27825]"
+                    : "bg-zinc-100 border-zinc-200 text-zinc-900 focus:border-[#f27825] focus:bg-white"
+                }`}
+              />
+            </div>
 
-            {/* BACKGROUND */}
-            <div
-              className={` absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-[#2E9E45] transition-all duration-300 ease-in-out
-                ${
-                  isLogin
-                    ? "left-1"
-                    : "left-[calc(50%)]"
-                }
-              `}
-            />
-
-            <button
-              type="button"
-              onClick={() => setIsLogin(true)}
-              className={` relative z-10 flex-1 py-2.5 rounded-full text-sm font-medium transition-colors
-                ${
-                  isLogin
-                    ? "text-white"
-                    : "text-[#1F2937]"
-                }
-              `}
-            >
-              Entrar
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setIsLogin(false)}
-              className={` relative z-10 flex-1 py-2.5 rounded-full text-sm font-medium transition-colors
-                ${
-                  !isLogin
-                    ? "text-white"
-                    : "text-[#1F2937]"
-                }
-              `}
-            >
-              Criar conta
-            </button>
-          </div>
-
-          {/* TITULO */}
-          <div className="mb-8">
-
-            <h2 className="text-4xl font-semibold text-[#1F2937] mb-3">
-
-              {isLogin
-                ? "Faça login"
-                : "Crie sua conta"}
-
-            </h2>
-
-            <p className="text-[#6B7280]">
-
-              {isLogin
-                ? "Entre para continuar sua jornada."
-                : "Cadastre-se para acessar a plataforma."}
-
-            </p>
-          </div>
-
-          {/* FORM */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-
-            <AnimatePresence mode="wait">
-
-              {!isLogin && (
-
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                    y: -10,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    y: -10,
-                  }}
-                  transition={{
-                    duration: 0.2,
-                  }}
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label
+                  className={`text-xs font-semibold uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-zinc-500"}`}
                 >
+                  Senha
+                </label>
+                <a
+                  href="#"
+                  className="text-[11px] font-medium text-[#f27825] hover:underline"
+                >
+                  Esqueceu?
+                </a>
+              </div>
+              <input
+                type="password"
+                name="senha"
+                required
+                value={credenciais.senha}
+                onChange={atualizarLogin}
+                placeholder="••••••••"
+                className={`w-full rounded-xl p-3 text-sm outline-none transition-all border ${
+                  isDarkMode
+                    ? "bg-white/5 border-white/10 text-white focus:border-[#f27825]"
+                    : "bg-zinc-100 border-zinc-200 text-zinc-900 focus:border-[#f27825] focus:bg-white"
+                }`}
+              />
+            </div>
 
-                  {/* NOME */}
-                  <input
-                    type="text"
-                    required
-                    placeholder="Nome completo"
-                    name="nome"
-                    value={usuario.nome}
-                    onChange={atualizarEstado}
-                    className="w-full bg-white border border-[#E5E7EB] rounded-2xl px-4 py-4 outline-none transition-all duration-200 focus:border-[#2E9E45] focus:ring-4 focus:ring-[#2E9E45]/10"/>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* EMAIL */}
-            <input
-              type="email"
-              required
-              placeholder="E-mail"
-              name="usuario"
-              value={usuario.usuario}
-              onChange={atualizarEstado}
-              className="w-full bg-white border border-[#E5E7EB] rounded-2xl px-4 py-4 outline-none transition-all duration-200 focus:border-[#2E9E45] focus:ring-4 focus:ring-[#2E9E45]/10"/>
-
-            <AnimatePresence>
-
-              {!isLogin && (
-
-                <>
-                  {/* ALTURA */}
-                  <motion.div
-                    initial={{
-                      opacity: 0,
-                      y: -10,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: -10,
-                    }}
-                    transition={{
-                      duration: 0.2,
-                    }}
-                  >
-                    <input
-                      type="number"
-                      step="0.01"
-                      required
-                      placeholder="Altura"
-                      name="altura"
-                      value={usuario.altura}
-                      onChange={atualizarEstado}
-                      className=" w-full bg-white border border-[#E5E7EB] rounded-2xl px-4 py-4 outline-none transition-all duration-200 focus:border-[#2E9E45] focus:ring-4 focus:ring-[#2E9E45]/10"/>
-                  </motion.div>
-
-                  {/* PESO */}
-                  <motion.div
-                    initial={{
-                      opacity: 0,
-                      y: -10,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: -10,
-                    }}
-                    transition={{
-                      duration: 0.2,
-                    }}
-                  >
-                    <input
-                      type="number"
-                      step="0.01"
-                      required
-                      placeholder="Peso"
-                      name="peso"
-                      value={usuario.peso}
-                      onChange={atualizarEstado}
-                      className="w-full bg-white border border-[#E5E7EB] rounded-2xl px-4 py-4 outline-none transition-all duration-200 focus:border-[#2E9E45] focus:ring-4 focus:ring-[#2E9E45]/10"/>
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
-              
-              <AnimatePresence>
-
-                {!isLogin && (
-
-                  <motion.div
-                    initial={{
-                      opacity: 0,
-                      y: -10,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: -10,
-                    }}
-                    transition={{
-                      duration: 0.2,
-                    }}
-                  >
-
-                    <input
-                      type="text"
-                      placeholder="URL da foto"
-                      name="foto"
-                      value={usuario.foto}
-                      onChange={atualizarEstado}
-                      className=" w-full bg-white border border-[#E5E7EB] rounded-2xl px-4 py-4 outline-none transition-all duration-200 focus:border-[#2E9E45] focus:ring-4 focus:ring-[#2E9E45]/10"/>
-
-                  </motion.div>
-                )}
-
-              </AnimatePresence>
-            
-
-            {/* SENHA */}
-            <input
-              type="password"
-              required
-              placeholder="Senha"
-              name="senha"
-              value={usuario.senha}
-              onChange={atualizarEstado}
-              className="w-full bg-white border border-[#E5E7EB] rounded-2xl px-4 py-4 outline-none transition-all duration-200 focus:border-[#2E9E45] focus:ring-4 focus:ring-[#2E9E45]/10"/>
-
-            {/* BOTÃO */}
             <button
               type="submit"
-              className="w-full bg-[#2E9E45] text-white rounded-full py-4 mt-4 font-medium transition-all duration-300 hover:bg-[#1F6E31] hover:scale-[1.01] active:scale-[0.99]"
+              disabled={loading}
+              className="w-full bg-[#f27825] hover:bg-[#d9651c] disabled:bg-zinc-600 text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-300 mt-4 shadow-lg active:scale-[0.99] flex items-center justify-center gap-2"
             >
-              {isLogin
-                ? "Continuar"
-                : "Criar conta"}
+              {loading ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                "Entrar na Plataforma"
+              )}
             </button>
           </form>
-        </motion.div>
+        ) : (
+          /* FORMULÁRIO DE REGISTRO INTEGRADO COM IMC */
+          <form onSubmit={ejecutarRegistro} className="space-y-4">
+            <div>
+              <label
+                className={`block mb-1 text-xs font-semibold uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-zinc-500"}`}
+              >
+                Nome Completo
+              </label>
+              <input
+                type="text"
+                name="nome"
+                required
+                value={registro.nome}
+                onChange={atualizarRegistro}
+                placeholder="Ex: Pedro Gomes"
+                className={`w-full rounded-xl p-3 text-sm outline-none transition-all border ${
+                  isDarkMode
+                    ? "bg-white/5 border-white/10 text-white focus:border-[#f27825]"
+                    : "bg-zinc-100 border-zinc-200 text-zinc-900 focus:border-[#f27825] focus:bg-white"
+                }`}
+              />
+            </div>
+
+            <div>
+              <label
+                className={`block mb-1 text-xs font-semibold uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-zinc-500"}`}
+              >
+                E-mail de Acesso
+              </label>
+              <input
+                type="email"
+                name="usuario"
+                required
+                value={registro.usuario}
+                onChange={atualizarRegistro}
+                placeholder="seu@email.com"
+                className={`w-full rounded-xl p-3 text-sm outline-none transition-all border ${
+                  isDarkMode
+                    ? "bg-white/5 border-white/10 text-white focus:border-[#f27825]"
+                    : "bg-zinc-100 border-zinc-200 text-zinc-900 focus:border-[#f27825] focus:bg-white"
+                }`}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  className={`block mb-1 text-xs font-semibold uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-zinc-500"}`}
+                >
+                  Senha
+                </label>
+                <input
+                  type="password"
+                  name="senha"
+                  required
+                  value={registro.senha}
+                  onChange={atualizarRegistro}
+                  placeholder="••••••••"
+                  className={`w-full rounded-xl p-3 text-sm outline-none transition-all border ${
+                    isDarkMode
+                      ? "bg-white/5 border-white/10 text-white focus:border-[#f27825]"
+                      : "bg-zinc-100 border-zinc-200 text-zinc-900 focus:border-[#f27825] focus:bg-white"
+                  }`}
+                />
+              </div>
+              <div>
+                <label
+                  className={`block mb-1 text-xs font-semibold uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-zinc-500"}`}
+                >
+                  Confirmar
+                </label>
+                <input
+                  type="password"
+                  name="confirmarSenha"
+                  required
+                  value={registro.confirmarSenha}
+                  onChange={atualizarRegistro}
+                  placeholder="••••••••"
+                  className={`w-full rounded-xl p-3 text-sm outline-none transition-all border ${
+                    isDarkMode
+                      ? "bg-white/5 border-white/10 text-white focus:border-[#f27825]"
+                      : "bg-zinc-100 border-zinc-200 text-zinc-900 focus:border-[#f27825] focus:bg-white"
+                  }`}
+                />
+              </div>
+            </div>
+
+            {/* NOVOS CAMPOS ADICIONADOS: PESO E ALTURA */}
+            <div className="grid grid-cols-2 gap-4 pt-1">
+              <div>
+                <label
+                  className={`block mb-1 text-xs font-semibold uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-zinc-500"}`}
+                >
+                  Peso Corporal (kg)
+                </label>
+                <input
+                  type="number"
+                  step="0.1"
+                  name="peso"
+                  required
+                  value={registro.peso}
+                  onChange={atualizarRegistro}
+                  placeholder="Ex: 78.5"
+                  className={`w-full rounded-xl p-3 text-sm outline-none transition-all border ${
+                    isDarkMode
+                      ? "bg-white/5 border-white/10 text-white focus:border-[#f27825]"
+                      : "bg-zinc-100 border-zinc-200 text-zinc-900 focus:border-[#f27825] focus:bg-white"
+                  }`}
+                />
+              </div>
+              <div>
+                <label
+                  className={`block mb-1 text-xs font-semibold uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-zinc-500"}`}
+                >
+                  Altura (metros)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="altura"
+                  required
+                  value={registro.altura}
+                  onChange={atualizarRegistro}
+                  placeholder="Ex: 1.75"
+                  className={`w-full rounded-xl p-3 text-sm outline-none transition-all border ${
+                    isDarkMode
+                      ? "bg-white/5 border-white/10 text-white focus:border-[#f27825]"
+                      : "bg-zinc-100 border-zinc-200 text-zinc-900 focus:border-[#f27825] focus:bg-white"
+                  }`}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#f27825] hover:bg-[#d9651c] disabled:bg-zinc-600 text-white py-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-300 mt-4 shadow-lg active:scale-[0.99] flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                "Criar Conta VittaFit"
+              )}
+            </button>
+          </form>
+        )}
+
+        {/* ALTERNADOR DE ESTADO (FOOTER DO CARD) */}
+        <div
+          className={`mt-6 pt-4 border-t text-center ${isDarkMode ? "border-white/5" : "border-zinc-100"}`}
+        >
+          <p
+            className={`text-xs font-light ${isDarkMode ? "text-white/40" : "text-zinc-500"}`}
+          >
+            {isLogin ? (
+              <>
+                Não possui uma conta?{" "}
+                <button
+                  onClick={() => {
+                    setIsLogin(false);
+                    setErro("");
+                  }}
+                  className="font-semibold text-[#f27825] hover:underline bg-transparent border-none cursor-pointer"
+                >
+                  Cadastre-se grátis
+                </button>
+              </>
+            ) : (
+              <>
+                Já faz parte da equipe?{" "}
+                <button
+                  onClick={() => {
+                    setIsLogin(true);
+                    setErro("");
+                  }}
+                  className="font-semibold text-[#f27825] hover:underline bg-transparent border-none cursor-pointer"
+                >
+                  Faça seu Login
+                </button>
+              </>
+            )}
+          </p>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
 
