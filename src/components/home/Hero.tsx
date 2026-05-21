@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 export default function Hero({ isDarkMode }: { isDarkMode: boolean }) {
