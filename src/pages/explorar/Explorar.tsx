@@ -98,32 +98,80 @@ function Explorar({ isDarkMode = true }: ExplorarProps) {
   }>({});
 
   async function carregarDados() {
-    setIsLoading(true);
+  setIsLoading(true);
+
+  try {
+    let treinosApi: Treino[] = [];
+    let dietasApi: Dieta[] = [];
+
     try {
-      let treinosApi: Treino[] = [];
-      let dietasApi: Dieta[] = [];
-
       await buscar("/treinos", (dados: Treino[]) => {
-        treinosApi = dados;
+        treinosApi = Array.isArray(dados) ? dados : [];
       });
-
-      await buscar("/dietas", (dados: Dieta[]) => {
-        dietasApi = dados;
-      });
-
-      setTreinos(treinosApi);
-      setDietas(dietasApi);
-
-      const publicacoesSalvas = localStorage.getItem("publicacoesExplorar");
-      if (publicacoesSalvas) {
-        setPublicacoes(JSON.parse(publicacoesSalvas));
-      }
     } catch (error) {
-      console.error("Erro ao carregar dados do Explorar:", error);
-    } finally {
-      setIsLoading(false);
+      console.error("Erro ao buscar treinos no backend:", error);
     }
+
+    try {
+      await buscar("/dietas", (dados: Dieta[]) => {
+        dietasApi = Array.isArray(dados) ? dados : [];
+      });
+    } catch (error) {
+      console.error("Erro ao buscar dietas no backend:", error);
+    }
+
+    const treinosCache = localStorage.getItem("treinosCache");
+    const dietasCache = localStorage.getItem("dietasCache");
+
+    const treinosLocais: Treino[] = treinosCache ? JSON.parse(treinosCache) : [];
+    const dietasLocais: Dieta[] = dietasCache ? JSON.parse(dietasCache) : [];
+
+    const treinosUnificados = [...treinosApi];
+
+    treinosLocais.forEach((treinoLocal) => {
+      const jaExiste = treinosUnificados.some(
+        (treinoApi) => treinoApi.id === treinoLocal.id
+      );
+
+      if (!jaExiste) {
+        treinosUnificados.push(treinoLocal);
+      }
+    });
+
+    const dietasUnificadas = [...dietasApi];
+
+    dietasLocais.forEach((dietaLocal) => {
+      const jaExiste = dietasUnificadas.some(
+        (dietaApi) => dietaApi.id === dietaLocal.id
+      );
+
+      if (!jaExiste) {
+        dietasUnificadas.push(dietaLocal);
+      }
+    });
+
+    setTreinos(treinosUnificados);
+    setDietas(dietasUnificadas);
+
+    const publicacoesSalvas = localStorage.getItem("publicacoesExplorar");
+
+    const publicacoesLocalStorage: PublicacaoExplorar[] = publicacoesSalvas
+      ? JSON.parse(publicacoesSalvas)
+      : [];
+
+    const publicacoesAtualizadas = criarPublicacoesAutomaticas(
+      treinosUnificados,
+      dietasUnificadas,
+      publicacoesLocalStorage
+    );
+
+    setPublicacoes(publicacoesAtualizadas);
+  } catch (error) {
+    console.error("Erro ao carregar dados do Explorar:", error);
+  } finally {
+    setIsLoading(false);
   }
+}
 
   useEffect(() => {
     carregarDados();
@@ -152,6 +200,64 @@ function Explorar({ isDarkMode = true }: ExplorarProps) {
     setDietaSelecionadaId("");
     setComentarioPublicacao("");
   }
+
+  function criarPublicacoesAutomaticas(
+  treinosApi: Treino[],
+  dietasApi: Dieta[],
+  publicacoesSalvas: PublicacaoExplorar[]
+) {
+  const idsPublicados = publicacoesSalvas.map(
+    (publicacao) => `${publicacao.categoria}-${publicacao.itemOriginalId}`
+  );
+
+  const publicacoesTreinos: PublicacaoExplorar[] = treinosApi
+    .filter(
+      (treino) =>
+        treino.id && !idsPublicados.includes(`TREINO-${treino.id}`)
+    )
+    .map((treino) => ({
+      id: Number(`1${treino.id}`),
+      categoria: "TREINO",
+      usuario: treino.usuario || usuarioLogado,
+      comentarioPublicacao: "Compartilhou um treino cadastrado.",
+      titulo: treino.tipoTreino || "Treino registrado",
+      descricao: treino.descricao || "Compartilhou um treino de performance.",
+      data: treino.data,
+      detalhePrincipal: treino.intensidade
+        ? `Intensidade ${treino.intensidade}`
+        : "Intensidade Geral",
+      detalheSecundario: "Treino",
+      curtidas: 0,
+      comentarios: [],
+      itemOriginalId: treino.id,
+    }));
+
+  const publicacoesDietas: PublicacaoExplorar[] = dietasApi
+    .filter(
+      (dieta) =>
+        dieta.id && !idsPublicados.includes(`DIETA-${dieta.id}`)
+    )
+    .map((dieta) => ({
+      id: Number(`2${dieta.id}`),
+      categoria: "DIETA",
+      usuario: dieta.usuario || usuarioLogado,
+      comentarioPublicacao: "Compartilhou uma dieta cadastrada.",
+      titulo: dieta.tipo || "Dieta registrada",
+      descricao: dieta.descricao || "Compartilhou uma rotina nutricional.",
+      data: dieta.data,
+      detalhePrincipal: dieta.usuario?.imc
+        ? `IMC ${dieta.usuario.imc}`
+        : usuarioLogado.imc
+        ? `IMC ${usuarioLogado.imc}`
+        : "Métrica Geral",
+      detalheSecundario: "Dieta",
+      curtidas: 0,
+      comentarios: [],
+      itemOriginalId: dieta.id,
+    }));
+
+  return [...publicacoesTreinos, ...publicacoesDietas, ...publicacoesSalvas];
+}
 
   function publicarNoExplorar(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

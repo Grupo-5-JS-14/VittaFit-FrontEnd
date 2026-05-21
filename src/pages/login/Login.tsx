@@ -45,7 +45,6 @@ function Login({ isDarkMode = true }: LoginProps) {
 
     try {
       const resposta = await api.get("/usuarios");
-
       const usuarioEncontrado = resposta.data.find(
         (u: any) =>
           u.usuario === credenciais.usuario && u.senha === credenciais.senha,

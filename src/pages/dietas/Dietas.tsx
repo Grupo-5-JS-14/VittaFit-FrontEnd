@@ -62,36 +62,89 @@ export default function Dietas({ isDarkMode = true }: DietasProps) {
   ];
 
   async function carregarDietas() {
-    setIsLoading(true);
-    try {
-      await buscar("/dietas", (dados: Dieta[]) => setDietas(dados));
-    } catch (e) { 
-      console.error("Erro ao carregar dietas:", e); 
-    } finally { 
-      setIsLoading(false); 
+  setIsLoading(true);
+
+  try {
+    await buscar("/dietas", (dados: Dieta[]) => {
+      const listaDietas = Array.isArray(dados) ? dados : [];
+
+      setDietas(listaDietas);
+      localStorage.setItem("dietasCache", JSON.stringify(listaDietas));
+    });
+  } catch (e) {
+    console.error("Erro ao carregar dietas:", e);
+
+    const cache = localStorage.getItem("dietasCache");
+
+    if (cache) {
+      setDietas(JSON.parse(cache));
     }
+  } finally {
+    setIsLoading(false);
   }
+}
 
   useEffect(() => { 
     carregarDietas(); 
   }, []);
 
   async function handleAdicionar(nova: Omit<Dieta, "id" | "usuario">) {
-    if (!usuarioLogado?.id) return;
-    const payload = { ...nova, usuario: { id: usuarioLogado.id } };
-    const res = await cadastrar("/dietas", payload);
-    setDietas([res, ...dietas]);
+  if (!usuarioLogado?.id) {
+    alert("Erro: Você precisa estar autenticado para registrar uma dieta.");
+    return;
   }
 
-  async function handleDeletar(id: number) {
-    if (!confirm("Deseja realmente excluir este planejamento?")) return;
-    try {
-      await deletar(`/dietas/${id}`);
-      setDietas(dietas.filter(d => d.id !== id));
-    } catch (e) {
-      console.error("Erro ao deletar dieta:", e);
-    }
+  const payload = {
+    ...nova,
+    usuario: { id: usuarioLogado.id },
+  };
+
+  try {
+    const res: Dieta = await cadastrar("/dietas", payload);
+
+    setDietas((antigas) => {
+      const novaLista = [res, ...antigas];
+      localStorage.setItem("dietasCache", JSON.stringify(novaLista));
+      return novaLista;
+    });
+  } catch (error) {
+    console.error("Erro ao salvar dieta no banco. Criando em modo offline...", error);
+
+    const dietaMock: Dieta = {
+      ...nova,
+      id: Date.now(),
+      usuario: usuarioLogado,
+    };
+
+    setDietas((antigas) => {
+      const novaLista = [dietaMock, ...antigas];
+      localStorage.setItem("dietasCache", JSON.stringify(novaLista));
+      return novaLista;
+    });
   }
+}
+
+  async function handleDeletar(id: number) {
+  if (!confirm("Deseja realmente excluir este planejamento?")) return;
+
+  try {
+    await deletar(`/dietas/${id}`);
+
+    setDietas((antigas) => {
+      const novaLista = antigas.filter((d) => d.id !== id);
+      localStorage.setItem("dietasCache", JSON.stringify(novaLista));
+      return novaLista;
+    });
+  } catch (e) {
+    console.error("Erro ao deletar dieta:", e);
+
+    setDietas((antigas) => {
+      const novaLista = antigas.filter((d) => d.id !== id);
+      localStorage.setItem("dietasCache", JSON.stringify(novaLista));
+      return novaLista;
+    });
+  }
+}
 
   const dietasFiltradas = dietas.filter((dieta) => {
     return filtroTipo === "TODAS" || dieta.tipo?.toUpperCase().includes(filtroTipo);
@@ -115,7 +168,7 @@ export default function Dietas({ isDarkMode = true }: DietasProps) {
             }`}>
               Nutrição & Composição Corporal
             </p>
-            <h1 className="font-kare text-4xl md:text-6xl font-black uppercase tracking-tight leading-none text-white">
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight leading-none text-white">
               MINHAS <br />
               DIETAS
             </h1>
@@ -183,7 +236,7 @@ export default function Dietas({ isDarkMode = true }: DietasProps) {
         {/* SEÇÃO EXTRA: GRID MOSAICO DE DIRETRIZES NUTRICIONAIS */}
         <section className="pt-8 space-y-6">
           <div className="border-b border-white/10 pb-4">
-            <h2 className="font-kare text-2xl font-black uppercase tracking-tight">
+            <h2 className="text-2xl font-black uppercase tracking-tight">
               PILARES DA CONSTANCIA
             </h2>
             <p className="text-[11px] font-light text-white/60 uppercase tracking-wider mt-1">

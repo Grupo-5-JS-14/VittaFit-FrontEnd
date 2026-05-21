@@ -1,10 +1,10 @@
 import type { Usuario } from "./Usuario";
 
 export default interface Dieta {
-id: number;
+id?: number;
 imc: number;
 tipo: string;
 descricao: string;
 data: string;
-usuario: Usuario | null;
+usuario?: Usuario | null;
 }

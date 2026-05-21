@@ -58,72 +58,98 @@ function Treinos({ isDarkMode = true }: TreinosProps) {
   ];
 
   async function carregarTreinos() {
-    setIsLoading(true);
-    try {
-      await buscar("/treinos", (dados: Treino[]) => {
-        setTreinos(dados);
-        localStorage.setItem("treinosCache", JSON.stringify(dados));
-      });
-    } catch (error) {
-      console.error("Erro ao carregar os treinos do back-end:", error);
-      const cache = localStorage.getItem("treinosCache");
-      if (cache) setTreinos(JSON.parse(cache));
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  setIsLoading(true);
 
+  try {
+    await buscar("/treinos", (dados: Treino[]) => {
+      const listaTreinos = Array.isArray(dados) ? dados : [];
+
+      setTreinos(listaTreinos);
+      localStorage.setItem("treinosCache", JSON.stringify(listaTreinos));
+    });
+  } catch (error) {
+    console.error("Erro ao carregar os treinos do back-end:", error);
+
+    const cache = localStorage.getItem("treinosCache");
+
+    if (cache) {
+      setTreinos(JSON.parse(cache));
+    }
+  } finally {
+    setIsLoading(false);
+  }
+}
   useEffect(() => {
     carregarTreinos();
   }, []);
 
   async function handleAdicionarTreino(novoTreino: Omit<Treino, "id" | "usuario">) {
-    if (!usuarioLogado || !usuarioLogado.id) {
-      alert("Erro: Você precisa estar autenticado para registrar um treino.");
-      return;
-    }
+  if (!usuarioLogado || !usuarioLogado.id) {
+    alert("Erro: Você precisa estar autenticado para registrar um treino.");
+    return;
+  }
 
-    const payload = {
+  const payload = {
+    ...novoTreino,
+    usuario: { id: usuarioLogado.id },
+  };
+
+  try {
+    const dadosRetornados: Treino = await cadastrar("/treinos", payload);
+
+    setTreinos((antigos) => {
+      const novaLista = [dadosRetornados, ...antigos];
+      localStorage.setItem("treinosCache", JSON.stringify(novaLista));
+      return novaLista;
+    });
+  } catch (error) {
+    console.error("Erro ao salvar treino no banco. Criando em modo offline...", error);
+
+    const treinoMock: Treino = {
       ...novoTreino,
-      usuario: { id: usuarioLogado.id },
+      id: Date.now(),
+      usuario: usuarioLogado,
     };
 
-    try {
-      const dadosRetornados: Treino = await cadastrar("/treinos", payload);
-      setTreinos((antigos) => [dadosRetornados, ...antigos]);
-    } catch (error) {
-      console.error("Erro ao salvar treino no banco. Criando em modo offline...", error);
-      const treinoMock: Treino = {
-        ...novoTreino,
-        id: Date.now(),
-        usuario: usuarioLogado,
-      };
-      setTreinos((antigos) => [treinoMock, ...antigos]);
-    }
+    setTreinos((antigos) => {
+      const novaLista = [treinoMock, ...antigos];
+      localStorage.setItem("treinosCache", JSON.stringify(novaLista));
+      return novaLista;
+    });
   }
+}
 
   async function handleDeletarTreino(id: number) {
-    if (!confirm("Deseja realmente excluir esse registro de treino?")) return;
+  if (!confirm("Deseja realmente excluir esse registro de treino?")) return;
 
-    try {
-      await deletar(`/treinos/${id}`);
-      setTreinos((antigos) => antigos.filter((t) => t.id !== id));
-    } catch (error) {
-      console.error("Erro ao deletar treino no servidor, removendo do estado local.", error);
-      setTreinos((antigos) => antigos.filter((t) => t.id !== id));
-    }
+  try {
+    await deletar(`/treinos/${id}`);
+
+    setTreinos((antigos) => {
+      const novaLista = antigos.filter((t) => t.id !== id);
+      localStorage.setItem("treinosCache", JSON.stringify(novaLista));
+      return novaLista;
+    });
+  } catch (error) {
+    console.error("Erro ao deletar treino no servidor, removendo do estado local.", error);
+
+    setTreinos((antigos) => {
+      const novaLista = antigos.filter((t) => t.id !== id);
+      localStorage.setItem("treinosCache", JSON.stringify(novaLista));
+      return novaLista;
+    });
   }
+}
+const treinosFiltrados = treinos.filter((treino) => {
+  const correspondeTexto =
+    treino.tipoTreino?.toLowerCase().includes(filtroTexto.toLowerCase()) ||
+    treino.descricao?.toLowerCase().includes(filtroTexto.toLowerCase());
 
-  const treinosFiltrados = treinos.filter((treino) => {
-    const correspondeTexto =
-      treino.tipoTreino?.toLowerCase().includes(filtroTexto.toLowerCase()) ||
-      treino.descricao?.toLowerCase().includes(filtroTexto.toLowerCase());
+  const correspondeIntensidade =
+    filtroIntensidade === "TODAS" || treino.intensidade === filtroIntensidade;
 
-    const correspondeIntensidade =
-      filtroIntensidade === "TODAS" || treino.intensidade === filtroIntensidade;
-
-    return correspondeTexto && correspondeIntensidade;
-  });
+  return correspondeTexto && correspondeIntensidade;
+});
 
   return (
     <main className={`min-h-screen transition-colors duration-500 px-4 md:px-8 py-28 selection:bg-white/10 ${
@@ -147,7 +173,7 @@ function Treinos({ isDarkMode = true }: TreinosProps) {
             }`}>
               Sua saúde sob controle diário
             </p>
-            <h1 className="font-kare text-4xl md:text-6xl font-black uppercase tracking-tight leading-none select-none">
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight leading-none select-none">
               MEUS <br />
               TREINOS
             </h1>
