@@ -12,6 +12,7 @@ import Dietas from "./pages/dietas/Dietas";
 import ModalPostar from "./components/modais/ModalPostar";
 import ModalCriarTreino from "./components/modais/ModalCriarTreino";
 import ModalMontarDieta from "./components/modais/ModalMontarDieta"; 
+import Sobre from "./pages/about/About";
 
 function AppContent({ isDarkMode, setIsDarkMode }: { 
   isDarkMode: boolean; 
@@ -85,6 +86,7 @@ function AppContent({ isDarkMode, setIsDarkMode }: {
           <Route path="/explorar" element={<Explorar isDarkMode={isDarkMode} />} />
           <Route path="/treinos" element={<Treinos isDarkMode={isDarkMode} />} />
           <Route path="/dietas" element={<Dietas isDarkMode={isDarkMode} />} />
+          <Route path="/sobre" element={<Sobre isDarkMode={isDarkMode}/>} />
         </Routes>
       </div>
 
