@@ -90,7 +90,7 @@ function FormDieta({
       {/* CABEÇALHO */}
       <div className="flex justify-between items-start gap-4 mb-6 pb-4 border-b border-white/10">
         <div>
-          <h3 className="font-kare text-lg md:text-xl font-black uppercase tracking-tight text-white">
+          <h3 className=" text-lg md:text-xl font-black uppercase tracking-tight text-white">
             REGISTRAR NOVA DIETA
           </h3>
 

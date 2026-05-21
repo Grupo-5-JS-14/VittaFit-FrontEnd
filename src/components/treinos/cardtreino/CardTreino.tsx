@@ -51,7 +51,7 @@ function CardTreino({ treino, isDarkMode, onDeletar }: CardTreinoProps) {
             />
 
             <div className="flex flex-col justify-center">
-              <h2 className="font-kare text-xl md:text-2xl font-black uppercase tracking-tight text-white leading-none">
+              <h2 className="font-bold text-xl md:text-2xl uppercase tracking-tight text-white leading-none">
                 {treino.tipoTreino}
               </h2>
 

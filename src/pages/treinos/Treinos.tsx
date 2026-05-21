@@ -147,7 +147,7 @@ function Treinos({ isDarkMode = true }: TreinosProps) {
             }`}>
               Sua saúde sob controle diário
             </p>
-            <h1 className="font-kare text-4xl md:text-6xl font-black uppercase tracking-tight leading-none select-none">
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight leading-none select-none">
               MEUS <br />
               TREINOS
             </h1>
