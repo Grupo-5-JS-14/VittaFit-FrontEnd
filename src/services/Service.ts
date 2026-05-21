@@ -4,7 +4,7 @@ import type Dieta from '../models/Dieta'
 import type Treino from '../models/Treino'
 
 export const api = axios.create({
-  baseURL: 'https://vittafit-backend.onrender.com/' 
+  baseURL: 'https://backend-fitness-o7sf.onrender.com/' 
 })
 
 
