@@ -5,6 +5,7 @@ import { Search, Compass, User, Menu, X, ArrowRight, Settings, PlusCircle, Bookm
 interface NavBarProps {
   isDarkMode: boolean;
   setIsDarkMode: (value: boolean) => void;
+   onAbrirPostar?: () => void;
 }
 
 export default function NavBar({ isDarkMode, setIsDarkMode }: NavBarProps) {

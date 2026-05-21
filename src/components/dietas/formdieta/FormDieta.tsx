@@ -16,7 +16,7 @@ function FormDieta({
   onFechar,
 }: FormDietaProps) {
 
-  const [tipoDieta, setTipoDieta] = useState("");
+  const [tipo, setTipoDieta] = useState("");
   const [imc, setImc] = useState("");
   const [data, setData] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -26,7 +26,7 @@ function FormDieta({
     e.preventDefault();
 
     if (
-      !tipoDieta.trim() ||
+      !tipo.trim() ||
       !descricao.trim() ||
       !data ||
       !imc
@@ -46,7 +46,7 @@ function FormDieta({
       );
 
       const novaDieta = {
-        tipoDieta,
+        tipo,
         imc: Number(imc),
         data,
         descricao,
@@ -126,7 +126,7 @@ function FormDieta({
 
             <input
               type="text"
-              value={tipoDieta}
+              value={tipo}
               onChange={(e) =>
                 setTipoDieta(e.target.value)
               }

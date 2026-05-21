@@ -181,7 +181,7 @@ const usuarioId = usuarioLogado.id
       <div className="px-6 max-w-6xl mx-auto mt-12 relative z-20 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* CARD PRINCIPAL DO USUÁRIO */}
-        <div className={`rounded-3xl p-8 shadow-2xl transition-all duration-300 border flex flex-col justify-between gap-8 backdrop-blur-xl ${
+        <div className={`w-auto rounded-3xl p-8 shadow-2xl transition-all duration-300 border flex flex-col justify-between gap-8 backdrop-blur-xl ${
           isDarkMode 
             ? 'bg-white/3 border-white/10 shadow-black/40' 
             : 'bg-black/5 border-white/10 shadow-black/10'
@@ -229,31 +229,7 @@ const usuarioId = usuarioLogado.id
             </div>
           </div>
         </div>
-
-        {/* ATALHOS DE GESTÃO */}
-        <div className={`rounded-3xl p-8 shadow-2xl border flex flex-col justify-center gap-4 backdrop-blur-xl ${
-          isDarkMode ? 'bg-white/3 border-white/10 shadow-black/40' : 'bg-black/5 border-white/10 shadow-black/10'
-        }`}>
-          <p className="text-xs font-semibold uppercase tracking-widest mb-2 text-center lg:text-left text-white/60">Ações rápidas</p>
-          
-          <button 
-            onClick={onAbrirCriarTreino} 
-            className={`w-full font-bold py-4 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 shadow-lg active:scale-[0.99] cursor-pointer ${
-              isDarkMode 
-                ? 'bg-[#f27825] hover:bg-[#d9651c] text-white shadow-[#f27825]/10' 
-                : 'bg-[#074334] hover:bg-[#052b21] text-white shadow-black/10'
-            }`}
-          >
-            Criar Novo Treino
-          </button>
-          
-          <button 
-            onClick={onAbrirMontarDieta} 
-            className="w-full font-bold py-4 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 active:scale-[0.99] border cursor-pointer bg-white/5 hover:bg-white/10 border-white/10 text-white"
-          >
-            Montar Nova Dieta
-          </button>
-        </div>
+        
 
         {/* SEÇÃO DE PUBLICAÇÕES */}
         <div className="lg:col-span-3 mt-4">
