@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from "react";
 import { Send, X, Calendar, Dumbbell, Activity } from "lucide-react";
 import type Treino from "../../../models/Treino";
+import { criarTreino } from "../../../services/Service";
 
 interface FormTreinoProps {
   isDarkMode: boolean;
-  onAdicionar: (treino: Omit<Treino, "id" | "usuario">) => void;
+  onAdicionar: (treino: Treino) => void;
   onFechar: () => void;
 }
 
@@ -14,15 +15,57 @@ function FormTreino({ isDarkMode, onAdicionar, onFechar }: FormTreinoProps) {
   const [data, setData] = useState("");
   const [descricao, setDescricao] = useState("");
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!tipoTreino.trim() || !descricao.trim() || !data) {
-      alert("Por favor, preencha todos os campos requeridos.");
-      return;
-    }
-    onAdicionar({ tipoTreino, intensidade, data, descricao });
-    onFechar();
+  async function handleSubmit(e: FormEvent) {
+
+  e.preventDefault();
+
+  if (!tipoTreino.trim() || !descricao.trim() || !data) {
+
+    alert(
+      "Preencha todos os campos."
+    );
+
+    return;
   }
+
+  try {
+
+    const usuarioLogado = JSON.parse(
+      localStorage.getItem("usuario") || "{}"
+    );
+
+    const novoTreino = {
+      tipoTreino,
+      intensidade,
+      data,
+      descricao,
+      usuario: {
+        id: usuarioLogado.id,
+      },
+    };
+
+    const treinoCriado =
+      await criarTreino(
+        novoTreino as Treino
+      );
+
+    onAdicionar(treinoCriado);
+
+    alert(
+      "Treino salvo com sucesso!"
+    );
+
+    onFechar();
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert(
+      "Erro ao salvar treino."
+    );
+  }
+}
 
   return (
     <div className={`border rounded-2xl p-6 md:p-8 shadow-2xl transition-all duration-500 backdrop-blur-md ${
