@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Send, X, Calendar, Apple, Activity } from "lucide-react";
 import type Dieta from "../../../models/Dieta";
+import { criarDieta } from "../../../services/Service";
 
 interface FormDietaProps {
   isDarkMode: boolean;
@@ -9,20 +10,59 @@ interface FormDietaProps {
 }
 
 function FormDieta({ isDarkMode, onAdicionar, onFechar }: FormDietaProps) {
-  const [tipo, setTipo] = useState("");
+  const [tipoDieta, setTipoDieta] = useState("");
   const [imc, setImc] = useState("");
   const [data, setData] = useState("");
   const [descricao, setDescricao] = useState("");
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!tipo.trim() || !descricao.trim() || !data || !imc) {
+    if (!tipoDieta.trim() || !descricao.trim() || !data || !imc) {
       alert("Por favor, preencha todos os campos operacionais.");
       return;
     }
-    onAdicionar({ tipo, imc: Number(imc), data, descricao });
-    onFechar();
+    
+    try {
+  
+      const usuarioLogado = JSON.parse(
+        localStorage.getItem("usuario") || "{}"
+      );
+  
+      const novaDieta = {
+        tipoDieta,
+        imc,
+        data,
+        descricao,
+        usuario: {
+          id: usuarioLogado.id,
+        },
+      };
+  
+      const DietaCriada =
+        await criarDieta(
+          novaDieta as unknown as Dieta
+        );
+  
+      onAdicionar(DietaCriada);
+  
+      alert(
+        "Treino salvo com sucesso!"
+      );
+  
+      onFechar();
+  
+    } catch (error) {
+  
+      console.log(error);
+  
+      alert(
+        "Erro ao salvar treino."
+      );
+    }
   }
+
+
+
 
   const inputClass = `w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-[11px] font-bold tracking-wider uppercase text-white placeholder-white/30 outline-none focus:border-white/30 transition-all duration-300`;
 
@@ -58,8 +98,8 @@ function FormDieta({ isDarkMode, onAdicionar, onFechar }: FormDietaProps) {
             </label>
             <input
               type="text"
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value)}
+              value={tipoDieta}
+              onChange={(e) => setTipoDieta(e.target.value)}
               placeholder="EX: BULKING LIMPO"
               className={inputClass}
               required
