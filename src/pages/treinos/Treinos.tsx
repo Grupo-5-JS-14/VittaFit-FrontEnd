@@ -153,27 +153,23 @@ const treinosFiltrados = treinos.filter((treino) => {
 
   return (
     <main className={`min-h-screen transition-colors duration-500 px-4 md:px-8 py-28 selection:bg-white/10 ${
-      isDarkMode ? "bg-[#074334] text-white" : "bg-[#f27825] text-white"
+      isDarkMode ? "bg-[#074334] text-white" : "bg-[#f4f4f5] text-[#074334]"
     }`}>
       <section className="max-w-4xl mx-auto space-y-12">
         
         {/* HERO HEADER */}
-        <div className={`relative overflow-hidden rounded-3xl p-8 md:p-14 border transition-all duration-500 ${
-          isDarkMode 
-            ? "bg-linear-to-br from-[#06372b] to-[#074334] border-white/10 shadow-2xl shadow-black/30" 
-            : "bg-linear-to-br from-[#df6613] to-[#f27825] border-white/20 shadow-2xl shadow-black/10"
-        }`}>
+        <div className= " relative overflow-hidden rounded-3xl p-8 md:p-14 border transition-all duration-500 
+        bg-linear-to-br from-[#06372b] to-[#074334] border-white/10 shadow-2xl shadow-black/30">
           <div className={`absolute -right-12 -top-12 w-80 h-80 rounded-full blur-3xl pointer-events-none opacity-20 transition-colors ${
-            isDarkMode ? "bg-[#f27825]" : "bg-[#074334]"
+            isDarkMode ? "bg-[#d4d4d8]" : "bg-[#074334]"
           }`} />
           
           <div className="relative z-10 max-w-2xl">
-            <p className={`text-[11px] font-bold tracking-[0.25em] uppercase mb-3 ${
-              isDarkMode ? "text-[#f27825]" : "text-[#074334]"
-            }`}>
+            <p className= "text-[11px] font-bold tracking-[0.25em] uppercase mb-3 text-[#f27825]"
+            >
               Sua saúde sob controle diário
             </p>
-            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight leading-none select-none">
+            <h1 className="text-4xl md:text-6xl font-black text-[#d4d4d8] uppercase tracking-tight leading-none select-none">
               MEUS <br />
               TREINOS
             </h1>

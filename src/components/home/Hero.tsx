@@ -21,10 +21,9 @@ export default function Hero({ isDarkMode }: { isDarkMode: boolean }) {
 
   return (
     <section className={`relative h-screen w-full overflow-hidden transition-colors duration-500 ${
-      isDarkMode ? 'bg-[#074334]' : 'bg-[#f27825]'
+      isDarkMode ? 'bg-[#074334]' : 'bg-[#f4f4f5]'
     }`}>
       
-      {/* 2. INSTÂNCIAS DAS IMAGENS (Apenas 4 fotos) */}
       <div className="absolute inset-0 z-0">
         {slides.map((image, index) => (
           <div
@@ -45,16 +44,14 @@ export default function Hero({ isDarkMode }: { isDarkMode: boolean }) {
           </div>
         ))}
         
-        {/* Camadas de cor sobrepostas que alteram o tom das fotos fixas */}
         <div className={`absolute inset-0 z-1 transition-colors duration-500 ${
-          isDarkMode ? 'bg-[#074334]/40' : 'bg-[#f27825]/20'
+          isDarkMode ? 'bg-[#074334]/40' : 'bg-[#f4f4f5]/20'
         }`} />
         <div className={`absolute inset-0 z-2 transition-all duration-500 bg-linear-to-r ${
-          isDarkMode ? 'from-[#074334]/90 via-[#074334]/40' : 'from-[#f27825]/95 via-[#f27825]/50'
+          isDarkMode ? 'from-[#074334]/90 via-[#074334]/40' : 'from-[#f4f4f5]/95 via-[#f4f4f5]/50'
         } to-transparent`} />
       </div>
 
-      {/* 3. CONTEÚDO E TEXTOS */}
       <div className="relative z-10 flex h-full w-full flex-col justify-center px-8 md:px-16 text-white">
         
         <div className="max-w-xl text-left animate-fade-in mt-12">
@@ -65,27 +62,26 @@ export default function Hero({ isDarkMode }: { isDarkMode: boolean }) {
             Sua saúde sob controle diário
           </p>
 
-          <h1 className="font-kare text-5xl sm:text-6xl md:text-7xl uppercase tracking-tight leading-[0.95] select-none text-white">
-            BE PART <br />
-            OF THE <span className={`transition-colors ${isDarkMode ? 'text-[#f27825]' : 'text-[#074334]'}`}>FIT</span>
-          </h1>
+          <h1 className="font-kare text-5xl sm:text-6xl md:text-7xl uppercase tracking-tight leading-[0.95] select-none">
+          <span className={`transition-colors ${isDarkMode ? 'text-white' : 'text-[#074334]'}`}>
+            BE PART <br />OF THE{' '}
+            </span>
+            <span className="text-[#f27825]">FIT</span>
+            </h1>
 
-          <p className={`mt-5 text-xs font-light tracking-wide max-w-sm leading-relaxed transition-colors ${
-            isDarkMode ? 'text-gray-200' : 'text-white/90'
-          }`}>
-            Acompanhe sua evolução física, gerencie rotinas de treinos e consolide hábitos mais saudáveis com uma experiência digital de alta performance.
-          </p>
+<p className={`mt-5 text-xs font-light tracking-wide max-w-sm leading-relaxed transition-colors ${
+  isDarkMode ? 'text-gray-200' : 'text-[#074334]'
+}`}>
+  Acompanhe sua evolução física, gerencie rotinas de treinos e consolide hábitos mais saudáveis com uma experiência digital de alta performance.
+</p>
 
-          <button className="group mt-8 flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-white">
-            <span>Começar Jornada</span>
-            <ArrowRight size={14} className={`transition-transform group-hover:translate-x-1.5 ${
-              isDarkMode ? 'text-[#f27825]' : 'text-[#074334]'
-            }`} />
-          </button>
+<button className="group mt-8 flex items-center gap-3 text-xs font-bold uppercase tracking-widest">
+  <span className={`transition-colors ${isDarkMode ? 'text-white' : 'text-[#074334]'}`}>Começar Jornada</span>
+  <ArrowRight size={14} className="text-[#f27825] transition-transform group-hover:translate-x-1.5" />
+</button>
 
         </div>
 
-        {/* 4. PAGINAÇÃO LATERAL (01 a 04 baseado nas 4 fotos) */}
         <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden flex-col items-end gap-6 text-[10px] font-bold tracking-widest md:flex pr-4">
           {slides.map((_, index) => (
             <button
