@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { Usuario } from '../models/Usuario'
 
 export const api = axios.create({
-  baseURL: 'http://localhost:4000'
+  baseURL: 'https://backend-fitness-o7sf.onrender.com/'
 })
 
 export async function buscarUsuario(id: number) {
