@@ -60,7 +60,7 @@ function Sobre({ isDarkMode }: SobreProps) {
     },
     {
       nome: "Kay Ira do Val",
-      cargo: "Sobre e Produtos Vitta",
+      cargo: "PO e Developer",
       foto: "https://avatars.githubusercontent.com/u/260806102?v=4",
       github: "https://github.com/kayanedvlsantos-create",
       linkedin: "https://www.linkedin.com/in/kayane-do-val-lima/",
