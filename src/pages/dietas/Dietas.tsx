@@ -115,7 +115,7 @@ export default function Dietas({ isDarkMode = true }: DietasProps) {
             }`}>
               Nutrição & Composição Corporal
             </p>
-            <h1 className="font-bold text-4xl md:text-6xl font-black uppercase tracking-tight leading-none text-white">
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight leading-none text-white">
               MINHAS <br />
               DIETAS
             </h1>
@@ -183,7 +183,7 @@ export default function Dietas({ isDarkMode = true }: DietasProps) {
         {/* SEÇÃO EXTRA: GRID MOSAICO DE DIRETRIZES NUTRICIONAIS */}
         <section className="pt-8 space-y-6">
           <div className="border-b border-white/10 pb-4">
-            <h2 className="font-bold text-2xl font-black uppercase tracking-tight">
+            <h2 className="text-2xl font-black uppercase tracking-tight">
               PILARES DA CONSTANCIA
             </h2>
             <p className="text-[11px] font-light text-white/60 uppercase tracking-wider mt-1">
