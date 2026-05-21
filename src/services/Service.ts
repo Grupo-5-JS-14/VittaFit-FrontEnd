@@ -92,3 +92,4 @@ export const atualizar = async <T = any>(url: string, dados: Object): Promise<T>
 export const deletar = async (url: string): Promise<void> => {
   await api.delete(url);
 };
+
