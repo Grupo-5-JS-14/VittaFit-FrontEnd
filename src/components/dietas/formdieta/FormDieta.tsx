@@ -10,14 +10,14 @@ interface FormDietaProps {
 }
 
 function FormDieta({ isDarkMode, onAdicionar, onFechar }: FormDietaProps) {
-  const [tipoDieta, setTipoDieta] = useState("");
+  const [tipo, setTipo] = useState("");
   const [imc, setImc] = useState("");
   const [data, setData] = useState("");
   const [descricao, setDescricao] = useState("");
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!tipoDieta.trim() || !descricao.trim() || !data || !imc) {
+    if (!tipo.trim() || !descricao.trim() || !data || !imc) {
       alert("Por favor, preencha todos os campos operacionais.");
       return;
     }
@@ -29,8 +29,8 @@ function FormDieta({ isDarkMode, onAdicionar, onFechar }: FormDietaProps) {
       );
   
       const novaDieta = {
-        tipoDieta,
-        imc,
+        tipo,
+        imc: Number(imc),
         data,
         descricao,
         usuario: {
@@ -40,7 +40,7 @@ function FormDieta({ isDarkMode, onAdicionar, onFechar }: FormDietaProps) {
   
       const DietaCriada =
         await criarDieta(
-          novaDieta as unknown as Dieta
+          novaDieta as Dieta
         );
   
       onAdicionar(DietaCriada);
@@ -98,8 +98,8 @@ function FormDieta({ isDarkMode, onAdicionar, onFechar }: FormDietaProps) {
             </label>
             <input
               type="text"
-              value={tipoDieta}
-              onChange={(e) => setTipoDieta(e.target.value)}
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value)}
               placeholder="EX: BULKING LIMPO"
               className={inputClass}
               required

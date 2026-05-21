@@ -3,7 +3,7 @@ import type { Usuario } from "./Usuario";
 export default interface Dieta {
 id: number;
 imc: number;
-tipoDieta: string;
+tipo: string;
 descricao: string;
 data: string;
 usuario: Usuario | null;
