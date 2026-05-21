@@ -1,10 +1,12 @@
+import Sobre from "./pages/about/About"
+
+
+
 function App() {
 
   return (
     <>
-      <div className="flex">
-        <h2>Ola</h2>
-      </div>
+    <Sobre/>
     </>
   )
 }
