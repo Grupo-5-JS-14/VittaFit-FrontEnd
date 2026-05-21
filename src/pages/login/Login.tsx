@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
+import { api } from "../../services/Service";
 
 interface LoginProps {
   isDarkMode?: boolean;
@@ -38,19 +39,31 @@ function Login({ isDarkMode = true }: LoginProps) {
 
   async function executarLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     setErro("");
     setLoading(true);
 
     try {
-      console.log("Autenticando:", credenciais);
-      
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const resposta = await api.get("/usuarios");
+
+      const usuarioEncontrado = resposta.data.find(
+        (u: any) =>
+          u.usuario === credenciais.usuario && u.senha === credenciais.senha,
+      );
+
+      if (!usuarioEncontrado) {
+        setErro("Usuário ou senha inválidos.");
+
+        return;
+      }
+
+      localStorage.setItem("usuario", JSON.stringify(usuarioEncontrado));
 
       navigate("/perfil");
-
     } catch (err) {
       console.error(err);
-      setErro("Usuário ou senha inválidos.");
+
+      setErro("Erro ao autenticar usuário.");
     } finally {
       setLoading(false);
     }
@@ -58,33 +71,49 @@ function Login({ isDarkMode = true }: LoginProps) {
 
   async function ejecutarRegistro(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     setErro("");
 
     if (registro.senha !== registro.confirmarSenha) {
       setErro("As senhas não coincidem.");
+
       return;
     }
 
     setLoading(true);
+
     try {
+      const peso = Number(registro.peso);
+
+      const altura = Number(registro.altura);
+
+      const imc = peso / (altura * altura);
+
       const dadosParaEnviar = {
         nome: registro.nome,
+
         usuario: registro.usuario,
+
         senha: registro.senha,
+
         foto: registro.foto,
-        peso: Number(registro.peso) || 0,
-        altura: Number(registro.altura) || 0,
+
+        peso,
+
+        altura,
+
+        imc: Number(imc.toFixed(2)),
       };
 
-      console.log("Cadastrando usuário na service do NestJS:", dadosParaEnviar);
-      
-      
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
+      await api.post("/usuarios", dadosParaEnviar);
+
+      alert("Conta criada com sucesso!");
+
       setIsLogin(true);
     } catch (err) {
       console.error(err);
-      setErro("Erro ao criar conta. Tente novamente.");
+
+      setErro("Erro ao criar conta.");
     } finally {
       setLoading(false);
     }

@@ -6,7 +6,6 @@ import Footer from "./components/footer/Footer";
 import Perfil from './pages/perfil/Perfil';
 import Login from "./pages/login/Login";
 import Explorar from "./pages/explorar/Explorar";
-
 import './App.css'
 import Treinos from "./pages/treinos/Treinos";
 import Dietas from "./pages/dietas/Dietas";
